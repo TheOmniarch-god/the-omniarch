@@ -1258,11 +1258,114 @@ body::after{
   html.motion-ok .hanging-sign.in .hang-letter{ animation:rope-drop 1.12s cubic-bezier(.18,.9,.18,1.12) forwards, rope-sway 4.8s ease-in-out calc(.9s + var(--i)*.06s) infinite !important; }
 }
 
+
+
+/* ====================================================
+   OMNIARCH V27 — base polish / expensive motion pass
+   ==================================================== */
+/* Animated coloured darkness/texture for inner pages */
+.page-aurora{ position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; opacity:.55; }
+.page-aurora .pa{ position:absolute; border-radius:50%; filter:blur(52px); mix-blend-mode:multiply; opacity:.24; }
+.page-aurora .pa1{ width:42vw; height:42vw; left:-12vw; top:48vh; background:radial-gradient(circle,#3e563d,transparent 68%); animation:pageWaveA 28s ease-in-out infinite; }
+.page-aurora .pa2{ width:38vw; height:38vw; right:-10vw; top:88vh; background:radial-gradient(circle,#8b6320,transparent 68%); animation:pageWaveB 34s ease-in-out infinite; }
+.page-aurora .pa3{ width:34vw; height:34vw; left:38vw; top:150vh; background:radial-gradient(circle,#6d1f16,transparent 68%); animation:pageWaveC 31s ease-in-out infinite; }
+@keyframes pageWaveA{ 0%,100%{ transform:translate3d(0,0,0) scale(1); } 50%{ transform:translate3d(18vw,18vh,0) scale(1.18); } }
+@keyframes pageWaveB{ 0%,100%{ transform:translate3d(0,0,0) scale(1); } 50%{ transform:translate3d(-24vw,26vh,0) scale(.9); } }
+@keyframes pageWaveC{ 0%,100%{ transform:translate3d(0,0,0) scale(1); } 50%{ transform:translate3d(12vw,-18vh,0) scale(1.12); } }
+
+/* Premium top-left wordmark */
+.nav-brand-textonly .nav-wordmark{
+  font-family:'Fraunces',serif !important;
+  font-weight:700;
+  font-size:15px;
+  letter-spacing:.13em;
+  background:linear-gradient(90deg,#fff8df,#d4b25a 42%,#fff7d6 58%,#b98d2b);
+  -webkit-background-clip:text; background-clip:text; color:transparent !important;
+  text-shadow:0 0 22px rgba(212,178,90,.12);
+  position:relative;
+}
+.nav-brand-textonly .nav-wordmark::after{
+  content:''; position:absolute; left:0; right:.13em; bottom:-7px; height:1px;
+  background:linear-gradient(90deg, transparent, rgba(212,178,90,.7), transparent);
+  transform:scaleX(.35); transform-origin:center; opacity:.55; transition:transform .5s var(--ease), opacity .5s var(--ease);
+}
+.nav-brand-textonly .nav-wordmark.summon{ animation:omniSummon 1.05s var(--ease); }
+.nav-brand-textonly .nav-wordmark.summon::after,.nav-brand-textonly:hover .nav-wordmark::after{ transform:scaleX(1); opacity:1; }
+@keyframes omniSummon{ 0%{ letter-spacing:.13em; filter:none; transform:translateY(0); } 24%{ letter-spacing:.28em; filter:drop-shadow(0 0 12px rgba(212,178,90,.35)); transform:translateY(-1px); } 52%{ letter-spacing:.08em; transform:translateY(1px); } 100%{ letter-spacing:.13em; filter:none; transform:translateY(0); } }
+body.hero-light-nav .nav-main:not(.scrolled) .nav-brand-textonly .nav-wordmark{ background:linear-gradient(90deg,#15120C,#9c7a1e,#15120C); -webkit-background-clip:text; background-clip:text; }
+
+/* Restore visible motion even on Android installed mode */
+.hero-art-ring{ animation:ring-rotate 11s linear infinite !important; }
+.hero-art-ring::after{ content:''; position:absolute; inset:-7px; border-radius:50%; border:1px solid rgba(255,248,216,.2); animation:heroHaloOrbit 7s ease-in-out infinite; pointer-events:none; }
+@keyframes heroHaloOrbit{ 0%,100%{ transform:scale(.985); opacity:.42; box-shadow:0 0 22px rgba(212,178,90,.18); } 50%{ transform:scale(1.025); opacity:.9; box-shadow:0 0 38px rgba(212,178,90,.36); } }
+.cosmic-forge .forming-planet,.cosmic-forge .planet-shockwave,.cosmic-forge .meteor,.cosmic-forge::before,.cosmic-forge::after,.light-blueprint i,.light-blueprint b{ animation-play-state:running !important; }
+
+/* Mobile hero fit and one-line eyebrow */
+.hero-eyebrow{ white-space:nowrap; }
+@media (max-width:900px){
+  .hero-inner{ padding:76px 18px 34px !important; gap:20px !important; }
+  .hero-art-ring{ width:min(238px,64vw) !important; height:min(238px,64vw) !important; }
+  .hero-stack{ font-size:clamp(38px,11.8vw,56px) !important; }
+  .hero-eyebrow{ font-size:9.6px !important; letter-spacing:.105em !important; gap:7px !important; }
+  .hero-eyebrow::before,.hero-eyebrow::after{ width:12px !important; }
+  .hero-sub{ font-size:14.5px !important; line-height:1.5 !important; }
+  .hero-cta{ margin-top:18px !important; }
+}
+@media (max-height:720px) and (max-width:900px){
+  .hero-inner{ padding-top:64px !important; padding-bottom:26px !important; }
+  .hero-art-ring{ width:min(210px,58vw) !important; height:min(210px,58vw) !important; }
+  .hero-stack{ font-size:clamp(34px,10.8vw,48px) !important; }
+}
+
+/* Ticker always moves on mobile */
+.ticker-track{ animation:ticker 24s linear infinite !important; will-change:transform; }
+
+/* Work cards: make the visual plates feel intentional, not empty */
+.wthumb{ min-height:182px; }
+.works-grid .wcard .wthumb{ background-size:160% 160% !important; animation:workPlateDrift 14s ease-in-out infinite; }
+.works-grid .wcard:nth-child(1) .wthumb::before{ background:radial-gradient(circle at 28% 30%, rgba(212,178,90,.9) 0 6%, transparent 7%), linear-gradient(135deg, rgba(255,255,255,.08), transparent 30%), repeating-linear-gradient(90deg, rgba(212,178,90,.12) 0 1px, transparent 1px 18px), conic-gradient(from 40deg,#070707,#342411,#0d2632,#070707) !important; }
+.works-grid .wcard:nth-child(3) .wthumb::after{ content:'ART DIRECTION / VISUAL ARCHIVE' !important; }
+.works-grid .wcard:nth-child(5) .wthumb::after{ content:'DIGITAL PRODUCT COMMISSION' !important; }
+@keyframes workPlateDrift{ 0%,100%{ background-position:0% 50%; } 50%{ background-position:100% 50%; } }
+
+/* Dossier mobile neatness */
+.dossier-bar{ gap:10px; }
+.dossier-title,.dossier-status{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+@media (max-width:650px){
+  .dossier-bar{ padding:12px 14px; display:grid; grid-template-columns:auto minmax(0,1fr) auto; }
+  .dossier-title{ font-size:9.6px; }
+  .dossier-status{ font-size:10px; }
+  .dossier-tabs{ overflow-x:auto; flex-wrap:nowrap; padding-bottom:2px; }
+  .dossier-tabs button{ white-space:nowrap; padding:10px 13px; }
+}
+
+/* End sign: no flash on tap, one-line caption, more threaded feel */
+.hanging-word{ position:relative; }
+.hanging-word::before,.hanging-word::after{ content:''; position:absolute; left:8%; right:8%; top:82px; height:1px; background:linear-gradient(90deg, transparent, rgba(156,122,30,.5), transparent); transform:rotate(-1.2deg); opacity:.65; pointer-events:none; }
+.hanging-word::after{ top:96px; transform:rotate(1.1deg); opacity:.35; }
+.hanging-sign.tugging .hang-letter{ animation:rope-tug .68s var(--ease) !important; }
+@keyframes rope-tug{ 0%,100%{ transform:translateY(0) rotate(0deg); } 35%{ transform:translateY(-7px) rotate(-3deg); } 70%{ transform:translateY(4px) rotate(2deg); } }
+.hanging-caption{ white-space:nowrap; font-size:clamp(8px,2.45vw,11px) !important; letter-spacing:.055em !important; }
+.footer-clean{ font-family:'Fraunces',serif !important; font-size:13px !important; color:rgba(21,18,12,.55) !important; }
+
+@media (prefers-reduced-motion: reduce){
+  html.motion-ok .page-aurora .pa{ animation-duration:28s !important; animation-iteration-count:infinite !important; }
+  html.motion-ok .hero-art-ring{ animation:ring-rotate 11s linear infinite !important; }
+  html.motion-ok .hero-art-ring::after{ animation:heroHaloOrbit 7s ease-in-out infinite !important; }
+  html.motion-ok .ticker-track{ animation:ticker 24s linear infinite !important; }
+  html.motion-ok .works-grid .wcard .wthumb{ animation:workPlateDrift 14s ease-in-out infinite !important; }
+  html.motion-ok .forming-planet{ animation:planet-cycle 11s ease-in-out infinite !important; }
+  html.motion-ok .planet-shockwave{ animation:planet-shock 11s ease-in-out infinite !important; }
+  html.motion-ok .meteor-a{ animation:meteor-pass 9s ease-in-out infinite 1.2s !important; }
+  html.motion-ok .meteor-b{ animation:meteor-pass 13s ease-in-out infinite 5.8s !important; }
+}
+
 </style>
 </head>
 <body>
 <canvas id="cursor-canvas"></canvas>
 <div class="ink-field" aria-hidden="true"><span class="b1"></span><span class="b2"></span><span class="b3"></span></div>
+<div class="page-aurora" aria-hidden="true"><span class="pa pa1"></span><span class="pa pa2"></span><span class="pa pa3"></span></div>
 
 <div id="progressBar"></div>
 
@@ -1275,7 +1378,7 @@ body::after{
 
 <nav class="nav-main" id="navMain">
   <a href="#top" class="nav-brand nav-brand-textonly" aria-label="The Omniarch — return to the dark landing theme">
-    <span class="nav-wordmark">THE OMNIARCH</span>
+    <span class="nav-wordmark" data-text="THE OMNIARCH">THE OMNIARCH</span>
   </a>
   <button class="nav-menu-btn" id="menuOpen" aria-expanded="false" aria-controls="menuOverlay">
     Menu
@@ -1523,7 +1626,7 @@ body::after{
       <button data-dtab="disciplines">Disciplines</button>
       <button data-dtab="presence">Presence</button>
       <button data-dtab="works-detail">Works</button>
-      <button data-dtab="business">Business</button>
+      <button data-dtab="business">Commerce</button>
     </div>
     <div class="dossier-panel active" id="dtab-overview">
       <table class="spec-table">
@@ -1564,12 +1667,12 @@ body::after{
     <div class="dossier-panel" id="dtab-business">
       <table class="spec-table business-table">
         <tr><th>Business Name</th><td><strong>The Omniarch</strong></td></tr>
-        <tr><th>Business Type</th><td>Large-scale digital production and digital product services.</td></tr>
-        <tr><th>Products / Services</th><td>Custom websites and web apps · Interactive fiction / reading systems · Brand identity and graphic design · Digital product design · Media/content direction · Original digital products under The Omniarch name.</td></tr>
-        <tr><th>Payment Purpose</th><td>Payments may be accepted for commissioned digital services, digital product builds, design work, consultation, content direction, and access/licensing to original digital products where applicable.</td></tr>
-        <tr><th>Delivery</th><td>Digital work is delivered remotely by agreed milestone, email, live URL, downloadable file, or deployed web product depending on the project scope.</td></tr>
-        <tr><th>Support</th><td>Project communication and support are handled through <a href="#" id="businessEmailLink">···</a>. Timelines, deliverables, and revisions are agreed before payment or project start.</td></tr>
-        <tr><th>Refund / Disputes</th><td>For custom digital work, refund eligibility depends on project stage and delivered milestones. If a payment or delivery issue occurs, contact The Omniarch first for resolution.</td></tr>
+        <tr><th>Business Type</th><td>Large-scale digital production, digital product design, and creative technology services.</td></tr>
+        <tr><th>Services</th><td>Custom websites and web apps · Interactive reading systems · Brand identity and graphic design · Digital product design · Media/content direction · Original digital products under The Omniarch name.</td></tr>
+        <tr><th>Engagements</th><td>Client payments cover agreed digital services such as commissioned builds, interface design, brand work, consultation, content direction, and original digital product packages.</td></tr>
+        <tr><th>Delivery Model</th><td>Work is delivered remotely through agreed milestones: live URLs, deployed web products, downloadable files, or documented digital handoff depending on scope.</td></tr>
+        <tr><th>Client Support</th><td>Project communication is handled through <a href="#" id="businessEmailLink">···</a>. Scope, timeline, deliverables, and revisions are agreed before project start.</td></tr>
+        <tr><th>Project Terms</th><td>For custom digital work, revisions and refund eligibility depend on project stage and delivered milestones. Any delivery concern should be raised directly for resolution.</td></tr>
       </table>
     </div>
   </div>
@@ -1625,7 +1728,7 @@ body::after{
 </section>
 
 <footer class="footer-clean">
-  <div>Copyright 2026 The Omniarch — Architect of the Cosmos</div>
+  <div>© 2026 The Omniarch — Architect of the Cosmos</div>
 </footer>
 
 </div>
@@ -1864,7 +1967,7 @@ document.querySelectorAll('[data-dtab]').forEach(function(btn){
   });
 })();
 
-/* ============ HERO ART 3D + TRIPLE-TAP THEME SWITCH / RESET ============ */
+/* ============ HERO ART 3D + IDLE ORBIT + TAP THEME SWITCH / RESET ============ */
 (function(){
   document.documentElement.classList.add('motion-ok');
   var hero=document.querySelector('.hero');
@@ -1874,8 +1977,7 @@ document.querySelectorAll('[data-dtab]').forEach(function(btn){
   var sub=document.querySelector('.hero-sub');
   var navBrand=document.querySelector('.nav-brand');
   if(!hero || !ring) return;
-  var awakened=false, pointerDown=false, tapCount=0, tapTimer=null;
-  var lastTilt={rx:0,ry:0,tx:0,ty:0};
+  var awakened=false, pointerDown=false, lastInput=0, downX=0, downY=0;
   var darkCopy={ eyebrow:'Architect of the Cosmos', a:'Systems', b:'built to', c:'<em>endure.</em>', sub:'Code, interactive worlds, brand systems, and original commentary — built by one person, to one standard, under one name.' };
   var lightCopy={ eyebrow:'Large-Scale Digital Production', a:'Worlds', b:'built for', c:'<em>scale.</em>', sub:'Large-scale digital production for a worldwide audience — software, interactive stories, visual systems, and channel architecture under one name.' };
   function setCopy(copy){
@@ -1889,40 +1991,39 @@ document.querySelectorAll('[data-dtab]').forEach(function(btn){
     document.body.classList.toggle('hero-light-nav', awakened);
     setCopy(awakened ? lightCopy : darkCopy);
   }
-  function applyTilt(rx,ry,tx,ty){
-    lastTilt={rx:rx,ry:ry,tx:tx,ty:ty};
-    ring.style.transform='perspective(950px) rotateX('+rx.toFixed(2)+'deg) rotateY('+ry.toFixed(2)+'deg) translate3d('+tx.toFixed(1)+'px,'+ty.toFixed(1)+'px,0)';
+  function applyTilt(rx,ry,tx,ty,z){
+    ring.style.transform='perspective(950px) rotateX('+rx.toFixed(2)+'deg) rotateY('+ry.toFixed(2)+'deg) translate3d('+tx.toFixed(1)+'px,'+ty.toFixed(1)+'px,'+(z||0).toFixed(1)+'px)';
   }
   function tiltFromPoint(x,y){
     var r=ring.getBoundingClientRect();
     var nx=((x-r.left)/r.width-.5)*2, ny=((y-r.top)/r.height-.5)*2;
     nx=Math.max(-1,Math.min(1,nx)); ny=Math.max(-1,Math.min(1,ny));
-    applyTilt(-ny*11, nx*13, nx*8, ny*7);
+    applyTilt(-ny*11, nx*13, nx*8, ny*7, 0);
   }
-  ring.addEventListener('pointerdown', function(e){ pointerDown=true; tiltFromPoint(e.clientX,e.clientY); try{ ring.setPointerCapture(e.pointerId); }catch(err){} });
-  ring.addEventListener('pointermove', function(e){ tiltFromPoint(e.clientX,e.clientY); });
+  ring.addEventListener('pointerdown', function(e){ pointerDown=true; downX=e.clientX; downY=e.clientY; lastInput=Date.now(); tiltFromPoint(e.clientX,e.clientY); try{ ring.setPointerCapture(e.pointerId); }catch(err){} });
+  ring.addEventListener('pointermove', function(e){ lastInput=Date.now(); tiltFromPoint(e.clientX,e.clientY); });
   ring.addEventListener('pointerup', function(e){
-    pointerDown=false; tiltFromPoint(e.clientX,e.clientY);
-    tapCount++;
-    clearTimeout(tapTimer);
-    if(tapCount>=3){ tapCount=0; setTheme(!awakened); ring.classList.add('theme-pulse'); setTimeout(function(){ring.classList.remove('theme-pulse');},650); }
-    else tapTimer=setTimeout(function(){ tapCount=0; },720);
+    var moved=Math.hypot(e.clientX-downX,e.clientY-downY);
+    pointerDown=false; lastInput=Date.now(); tiltFromPoint(e.clientX,e.clientY);
+    if(moved<12){ setTheme(!awakened); ring.classList.add('theme-pulse'); setTimeout(function(){ring.classList.remove('theme-pulse');},650); }
   });
   ring.addEventListener('pointercancel', function(){ pointerDown=false; });
-  ring.addEventListener('pointerleave', function(){ if(pointerDown) return; ring.style.transform=''; });
   window.addEventListener('deviceorientation', function(e){
     if(pointerDown || e.beta == null || e.gamma == null) return;
+    lastInput=Date.now();
     var ry=Math.max(-10,Math.min(10,e.gamma/3));
     var rx=Math.max(-8,Math.min(8,-(e.beta-45)/5));
-    applyTilt(rx,ry,ry*.45,rx*.35);
+    applyTilt(rx,ry,ry*.45,rx*.35,0);
   }, true);
-  if(navBrand){
-    navBrand.addEventListener('click', function(e){
-      e.preventDefault();
-      window.scrollTo({ top:0, behavior:'smooth' });
-      if(awakened) setTheme(false);
-    });
+  function idle(t){
+    if(!pointerDown && Date.now()-lastInput>900){
+      var s=t/1000;
+      applyTilt(Math.sin(s*.75)*4.2, Math.cos(s*.62)*5.4, Math.cos(s*.45)*4.8, Math.sin(s*.5)*3.6, Math.sin(s*.9)*2);
+    }
+    requestAnimationFrame(idle);
   }
+  requestAnimationFrame(idle);
+  if(navBrand){ navBrand.addEventListener('click', function(e){ e.preventDefault(); window.scrollTo({ top:0, behavior:'smooth' }); if(awakened) setTheme(false); }); }
 })();
 
 
@@ -1930,25 +2031,19 @@ document.querySelectorAll('[data-dtab]').forEach(function(btn){
 (function(){
   document.documentElement.classList.add('motion-ok');
 
-  // Brand wordmark scramble on tap/hover/focus.
+  // Brand wordmark: premium summon pulse, no cheap character scramble.
   var brand=document.querySelector('.nav-wordmark');
   if(brand){
-    var original=brand.textContent, chars='█▓▒░◇◆✦✧THEOMNIARCH';
-    function scramble(){
-      brand.classList.add('scrambling');
-      var t=0, max=18;
-      var timer=setInterval(function(){
-        t++;
-        brand.textContent=original.split('').map(function(ch,i){
-          if(ch===' ') return ' ';
-          return t>max*(i/original.length) ? ch : chars[Math.floor(Math.random()*chars.length)];
-        }).join('');
-        if(t>=max){ clearInterval(timer); brand.textContent=original; setTimeout(function(){brand.classList.remove('scrambling');},120); }
-      },38);
+    function summon(){
+      brand.classList.remove('summon');
+      void brand.offsetWidth;
+      brand.classList.add('summon');
+      clearTimeout(brand._summonTimer);
+      brand._summonTimer=setTimeout(function(){ brand.classList.remove('summon'); }, 1100);
     }
-    brand.addEventListener('pointerdown', scramble);
-    brand.addEventListener('mouseenter', scramble);
-    brand.addEventListener('focus', scramble);
+    brand.addEventListener('pointerdown', summon);
+    brand.addEventListener('mouseenter', summon);
+    brand.addEventListener('focus', summon);
   }
 
   // JS-driven YouTube rail fallback for mobile browsers where CSS marquee stalls.
@@ -1974,8 +2069,8 @@ document.querySelectorAll('[data-dtab]').forEach(function(btn){
   // End rope sign: tap to replay + hand sway.
   var sign=document.querySelector('.hanging-sign');
   if(sign){
-    function replay(){ sign.classList.remove('in'); void sign.offsetWidth; sign.classList.add('in'); }
-    sign.addEventListener('pointerdown', replay);
+    function tug(){ sign.classList.add('tugging'); clearTimeout(sign._tugTimer); sign._tugTimer=setTimeout(function(){ sign.classList.remove('tugging'); }, 700); }
+    sign.addEventListener('pointerdown', tug);
     sign.addEventListener('pointermove', function(e){
       var r=sign.getBoundingClientRect();
       var nx=((e.clientX-r.left)/r.width-.5)*2;
