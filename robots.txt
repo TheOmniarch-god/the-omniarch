@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://theomniarch.com.ng/sitemap.xml
