@@ -1480,6 +1480,38 @@ body.hero-light-nav .nav-main:not(.scrolled) .nav-brand-textonly .nav-wordmark{ 
   .nav-menu-btn{ width:38px; height:38px; }
 }
 
+
+
+/* ====================================================
+   OMNIARCH V31 — Rosehot brand font
+   Rosehot free version from 1001Fonts is listed as free for commercial use.
+   Baik is not embedded because its 1001Fonts page lists personal-use only.
+   ==================================================== */
+@font-face{
+  font-family:'Rosehot Omniarch';
+  src:url('/assets/fonts/rosehot.woff') format('woff'), url('/assets/fonts/rosehot.ttf') format('truetype');
+  font-weight:400;
+  font-style:normal;
+  font-display:swap;
+}
+.nav-brand-textonly .nav-wordmark,
+.footer-clean div{
+  font-family:'Rosehot Omniarch', var(--display), serif !important;
+  font-weight:400 !important;
+  color:var(--gold-line) !important;
+  background:none !important;
+  -webkit-text-fill-color:currentColor !important;
+  letter-spacing:.09em !important;
+  text-transform:uppercase;
+}
+.nav-brand-textonly .nav-wordmark{ font-size:18px !important; line-height:1; }
+.footer-clean div{ font-size:17px !important; line-height:1.35; }
+body.hero-light-nav .nav-main:not(.scrolled) .nav-brand-textonly .nav-wordmark{ color:var(--ink) !important; }
+@media (max-width:640px){
+  .nav-brand-textonly .nav-wordmark{ font-size:15px !important; letter-spacing:.075em !important; }
+  .footer-clean div{ font-size:15px !important; }
+}
+
 </style>
 <script type="application/ld+json">
 {
