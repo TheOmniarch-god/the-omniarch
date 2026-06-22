@@ -1360,7 +1360,76 @@ body.hero-light-nav .nav-main:not(.scrolled) .nav-brand-textonly .nav-wordmark{ 
   html.motion-ok .meteor-b{ animation:meteor-pass 13s ease-in-out infinite 5.8s !important; }
 }
 
+
+
+/* ====================================================
+   OMNIARCH V28 — verification/legal readiness
+   ==================================================== */
+.footer-clean{ gap:14px 24px !important; }
+.footer-legal{ display:flex; gap:14px; flex-wrap:wrap; font-family:'Fragment Mono',monospace; font-size:11px; }
+.footer-legal a{ text-decoration:underline; text-decoration-color:rgba(21,18,12,.18); color:var(--ink-faint); }
+.footer-legal a:hover{ color:var(--seal); }
+.contact-list a[href^="/"]{ text-decoration:underline; text-decoration-color:var(--gold-line); }
+@media (max-width:640px){ .footer-clean{ justify-content:center !important; text-align:center !important; } .footer-legal{ justify-content:center; width:100%; } }
+
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "The Omniarch",
+  "url": "https://theomniarch.com.ng/",
+  "email": "omniarchportal@gmail.com",
+  "description": "Large-scale digital production, digital product design, software, interactive worlds, brand systems, and original commentary.",
+  "areaServed": "Worldwide",
+  "serviceType": [
+    "Digital product services",
+    "Large-scale digital production",
+    "Web apps",
+    "Brand and graphic design",
+    "Interactive reading systems",
+    "Content direction"
+  ],
+  "sameAs": [
+    "https://www.youtube.com/@GodofPeakFiction",
+    "https://www.tiktok.com/@godofpeakfiction"
+  ],
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Digital Services",
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Custom websites and web apps"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Interactive reading systems"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Brand and graphic design"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Digital product design and content direction"
+        }
+      }
+    ]
+  }
+}
+</script>
 </head>
 <body>
 <canvas id="cursor-canvas"></canvas>
@@ -1729,6 +1798,12 @@ body.hero-light-nav .nav-main:not(.scrolled) .nav-brand-textonly .nav-wordmark{ 
 
 <footer class="footer-clean">
   <div>© 2026 The Omniarch — Architect of the Cosmos</div>
+  <nav class="footer-legal" aria-label="Legal links">
+    <a href="/terms">Terms</a>
+    <a href="/privacy">Privacy</a>
+    <a href="/refund-policy">Refund Policy</a>
+    <a href="/delivery-policy">Delivery</a>
+  </nav>
 </footer>
 
 </div>
