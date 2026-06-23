@@ -1677,6 +1677,90 @@ h1,h2{ font-family:var(--display) !important; font-weight:700 !important; letter
   html.motion-ok .light-planet{ animation:lightPlanetFloat 9s ease-in-out infinite !important; }
 }
 
+
+
+/* ====================================================
+   OMNIARCH V35 — Majd-style tactile grain + draggable world seed
+   ==================================================== */
+/* Texture: not notebook lines — dense, tactile, granular surface like premium Framer paper. */
+.majd-texture{
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image:url('/assets/majd-grain.png?v=35');
+  background-size:256px 256px;
+  opacity:.92;
+  mix-blend-mode:multiply;
+}
+.hero::after{
+  content:'' !important; display:block !important; position:absolute; inset:0; z-index:1; pointer-events:none;
+  background-image:url('/assets/majd-dark-grain.png?v=35'), radial-gradient(ellipse at 50% 20%, transparent 34%, rgba(0,0,0,.2));
+  background-size:256px 256px, auto;
+  opacity:.62;
+  mix-blend-mode:screen;
+}
+.hero-awakened.hero::after{
+  background-image:url('/assets/majd-grain.png?v=35'), radial-gradient(ellipse at 50% 20%, transparent 32%, rgba(156,122,30,.12));
+  opacity:.58;
+  mix-blend-mode:multiply;
+}
+body::before{
+  background-image:
+    radial-gradient(circle at 12% 18%, rgba(21,18,12,.09) 0 .8px, transparent 1.3px),
+    radial-gradient(circle at 64% 32%, rgba(21,18,12,.055) 0 .7px, transparent 1.4px),
+    radial-gradient(circle at 38% 76%, rgba(156,122,30,.07) 0 .9px, transparent 1.5px) !important;
+  background-size:17px 19px,27px 29px,39px 43px !important;
+  opacity:.78 !important;
+}
+.ink-field::after{ display:none !important; }
+/* keep hero content above texture */
+.hero-inner{ z-index:3 !important; }
+.cosmic-forge{ z-index:2 !important; }
+
+/* Draggable world seed — works in dark and light theme, auto-floats until touched. */
+.drift-planet{
+  position:absolute;
+  left:var(--planet-x, 76%);
+  top:var(--planet-y, 26%);
+  width:70px; height:70px; border-radius:50%; border:0;
+  padding:0; margin:0; z-index:4; pointer-events:auto; touch-action:none; cursor:grab;
+  background:
+    radial-gradient(circle at 29% 22%, rgba(255,255,255,.92) 0 6%, rgba(212,178,90,.95) 7% 18%, rgba(74,45,14,.86) 42%, rgba(0,0,0,.96) 78%),
+    radial-gradient(circle at 65% 72%, rgba(255,255,255,.35), transparent 18%);
+  box-shadow:
+    inset -14px -16px 26px rgba(0,0,0,.58),
+    inset 6px 5px 15px rgba(255,255,255,.18),
+    0 0 22px rgba(212,178,90,.34),
+    0 18px 48px rgba(0,0,0,.32);
+  opacity:.76;
+  transform:translate(-50%,-50%) translate3d(var(--planet-dx,0px),var(--planet-dy,0px),0) scale(1);
+  animation:driftPlanetIdle 8s ease-in-out infinite;
+}
+.drift-planet::before{
+  content:''; position:absolute; inset:10px -18px; border-radius:50%;
+  border:1px solid rgba(212,178,90,.45);
+  transform:rotate(-18deg);
+  box-shadow:0 0 18px rgba(212,178,90,.08);
+}
+.drift-planet::after{
+  content:''; position:absolute; inset:-12px; border-radius:50%;
+  background:radial-gradient(circle, rgba(212,178,90,.2), transparent 64%);
+  z-index:-1; filter:blur(4px);
+}
+.drift-planet:active,.drift-planet.dragging{ cursor:grabbing; opacity:1; animation:none; }
+.hero-awakened .drift-planet{
+  background:radial-gradient(circle at 30% 22%, #fffaf0 0 8%, #d4b25a 12% 26%, #8d7130 46%, #15120C 84%);
+  box-shadow:inset -12px -14px 24px rgba(21,18,12,.42), 0 0 26px rgba(156,122,30,.22), 0 22px 50px rgba(21,18,12,.16);
+  opacity:.68;
+}
+@keyframes driftPlanetIdle{
+  0%,100%{ transform:translate(-50%,-50%) translate3d(var(--planet-dx,0px),var(--planet-dy,0px),0) scale(1); }
+  33%{ transform:translate(-50%,-50%) translate3d(calc(var(--planet-dx,0px) + 10px),calc(var(--planet-dy,0px) - 13px),0) scale(1.04); }
+  66%{ transform:translate(-50%,-50%) translate3d(calc(var(--planet-dx,0px) - 12px),calc(var(--planet-dy,0px) + 8px),0) scale(.98); }
+}
+@media (max-width:760px){
+  .drift-planet{ width:50px; height:50px; left:82%; top:22%; opacity:.7; }
+}
+@media (prefers-reduced-motion: reduce){ html.motion-ok .drift-planet{ animation:driftPlanetIdle 8s ease-in-out infinite !important; } }
+
 </style>
 <script type="application/ld+json">
 {
@@ -1734,12 +1818,37 @@ h1,h2{ font-family:var(--display) !important; font-weight:700 !important; letter
     ]
   }
 }
+
+/* ============ DRAGGABLE LANDING WORLD SEED ============ */
+(function(){
+  var planet=document.getElementById('driftPlanet');
+  var hero=document.querySelector('.hero');
+  if(!planet || !hero) return;
+  var dragging=false, startX=0, startY=0, startLeft=0, startTop=0;
+  function setByClient(x,y){
+    var r=hero.getBoundingClientRect();
+    var px=((x-r.left)/r.width)*100;
+    var py=((y-r.top)/r.height)*100;
+    px=Math.max(7,Math.min(93,px)); py=Math.max(8,Math.min(88,py));
+    planet.style.setProperty('--planet-x', px.toFixed(2)+'%');
+    planet.style.setProperty('--planet-y', py.toFixed(2)+'%');
+  }
+  planet.addEventListener('pointerdown', function(e){
+    dragging=true; planet.classList.add('dragging'); setByClient(e.clientX,e.clientY);
+    try{ planet.setPointerCapture(e.pointerId); }catch(err){}
+  });
+  planet.addEventListener('pointermove', function(e){ if(dragging) setByClient(e.clientX,e.clientY); });
+  function end(){ dragging=false; planet.classList.remove('dragging'); }
+  planet.addEventListener('pointerup', end); planet.addEventListener('pointercancel', end);
+})();
+
 </script>
 </head>
 <body>
 <canvas id="cursor-canvas"></canvas>
 <div class="ink-field" aria-hidden="true"><span class="b1"></span><span class="b2"></span><span class="b3"></span></div>
 <div class="page-aurora" aria-hidden="true"><span class="pa pa1"></span><span class="pa pa2"></span><span class="pa pa3"></span></div>
+<div class="majd-texture" aria-hidden="true"></div>
 
 <div id="progressBar"></div>
 
@@ -1795,6 +1904,7 @@ h1,h2{ font-family:var(--display) !important; font-weight:700 !important; letter
     <span class="meteor meteor-a"></span><span class="meteor meteor-b"></span>
     <span class="light-blueprint"><i></i><b></b></span>
     <span class="light-sunburst"></span><span class="light-orbit lo1"></span><span class="light-orbit lo2"></span><span class="light-comet"></span><span class="light-planet lp1"></span><span class="light-planet lp2"></span>
+    <button class="drift-planet" id="driftPlanet" type="button" aria-label="Move the world seed"></button>
   </div>
   <div class="hero-inner">
     <div class="hero-content">
