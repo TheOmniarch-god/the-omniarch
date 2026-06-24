@@ -1875,6 +1875,58 @@ body{
 @keyframes bodyCometIdle{ 0%,100%{ translate:0 0; } 50%{ translate:16px -12px; } }
 @media(max-width:760px){ .body-moon{ left:12%; top:18%; } .body-comet{ left:62%; top:76%; } }
 
+
+
+/* ====================================================
+   OMNIARCH V39 — portfolio repair / standalone showcase
+   ==================================================== */
+/* Hide the failed tabbed experiment and restore the previous systems grid. */
+.portfolio-system{ display:none !important; }
+.works-grid{ display:grid !important; }
+
+/* Standalone portfolio panel, separate from Ren Zu and before Digital Production. */
+.portfolio-gate{ padding-top:76px; padding-bottom:36px; }
+.portfolio-gate-inner{
+  display:grid; grid-template-columns:1.05fr .95fr; min-height:440px;
+  border:1px solid rgba(21,18,12,.13); border-radius:var(--r-lg); overflow:hidden;
+  background:linear-gradient(145deg,#11100d,#2d210f 56%,#090806);
+  box-shadow:0 34px 90px -62px rgba(21,18,12,.75);
+}
+.portfolio-gate-art{ position:relative; min-height:440px; overflow:hidden; background:#070604; }
+.portfolio-gate-art::before{
+  content:''; position:absolute; inset:-30%;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(212,178,90,.42), transparent 18%),
+    conic-gradient(from 0deg, transparent, rgba(212,178,90,.28), transparent, rgba(179,51,30,.16), transparent);
+  filter:blur(18px); animation:pgSlowSpin 18s linear infinite;
+}
+.portfolio-gate-art::after{
+  content:''; position:absolute; inset:0;
+  background:
+    linear-gradient(90deg, rgba(7,6,4,.2), rgba(7,6,4,.72)),
+    url('/assets/hero-omniarch-square.webp?v=33') center/cover;
+  opacity:.72; mix-blend-mode:screen;
+}
+.pg-orbit{ position:absolute; z-index:2; left:50%; top:50%; width:68%; aspect-ratio:1/.46; border:1px solid rgba(212,178,90,.36); border-radius:50%; transform:translate(-50%,-50%) rotate(-18deg); animation:pgOrbit 9s ease-in-out infinite; }
+.pg-core{ position:absolute; z-index:3; left:50%; top:50%; width:96px; height:96px; border-radius:50%; transform:translate(-50%,-50%); background:radial-gradient(circle at 32% 24%,#fff8d8,#d4b25a 24%,#181106 72%); box-shadow:0 0 42px rgba(212,178,90,.38), inset -12px -15px 22px rgba(0,0,0,.48); }
+.pg-label{ position:absolute; z-index:4; left:34px; bottom:30px; color:rgba(247,243,232,.72); font-family:var(--mono); font-size:11px; letter-spacing:.16em; }
+.portfolio-gate-copy{ padding:42px; background:linear-gradient(145deg,#f8f1df,#e9d8b7); color:var(--ink); display:flex; flex-direction:column; justify-content:center; }
+.portfolio-gate-copy h2{ margin:0; }
+.portfolio-gate-copy .lead{ color:var(--ink-soft); margin-top:18px; }
+.pg-actions{ display:flex; gap:12px; flex-wrap:wrap; margin-top:28px; }
+.pg-mini-grid{ display:grid; gap:8px; margin-top:26px; }
+.pg-mini-grid a{ display:flex; align-items:center; gap:12px; padding:12px 14px; border:1px solid rgba(21,18,12,.1); border-radius:14px; background:rgba(255,255,255,.28); color:var(--ink); text-decoration:none; font-weight:700; transition:.25s var(--ease); }
+.pg-mini-grid a:hover{ border-color:rgba(179,51,30,.34); transform:translateX(4px); color:var(--seal); }
+.pg-mini-grid span{ font-family:var(--mono); font-size:10px; color:var(--seal); }
+@keyframes pgSlowSpin{ to{ transform:rotate(360deg); } }
+@keyframes pgOrbit{ 0%,100%{ transform:translate(-50%,-50%) rotate(-18deg) scale(.95); } 50%{ transform:translate(-50%,-50%) rotate(8deg) scale(1.04); } }
+@media(max-width:880px){
+  .portfolio-gate{ padding-top:54px; }
+  .portfolio-gate-inner{ grid-template-columns:1fr; min-height:auto; }
+  .portfolio-gate-art{ min-height:300px; }
+  .portfolio-gate-copy{ padding:28px; }
+}
+
 </style>
 <script type="application/ld+json">
 {
@@ -2050,6 +2102,7 @@ body{
   </button>
   <div class="menu-inner">
     <nav class="menu-links">
+      <a href="#portfolio" data-menu-go>Portfolio</a>
       <a href="#digital-production" data-menu-go>Production</a>
       <a href="#studio" data-menu-go>Studio</a>
       <a href="#works" data-menu-go>Works</a>
@@ -2131,6 +2184,31 @@ body{
     <span class="ticker-item">·</span>
   </div>
 </div>
+
+
+<section class="section portfolio-gate" id="portfolio">
+  <div class="portfolio-gate-inner reveal">
+    <div class="portfolio-gate-art" aria-hidden="true">
+      <span class="pg-orbit"></span>
+      <span class="pg-core"></span>
+      <div class="pg-label">PORTFOLIO / SYSTEMS</div>
+    </div>
+    <div class="portfolio-gate-copy">
+      <div class="kicker">Portfolio</div>
+      <h2>Featured<br><em>Systems.</em></h2>
+      <p class="lead">A clean map of The Omniarch's work: digital products, interactive worlds, media systems, and visual direction — each one treated as a living system.</p>
+      <div class="pg-actions">
+        <a class="btn-seal" href="#works">View Systems ↓</a>
+        <a class="btn-line" href="/environment">Enter Environment ↗</a>
+      </div>
+      <div class="pg-mini-grid" aria-label="Portfolio highlights">
+        <a href="https://thelegendsofrenzu.theomniarch.com.ng" target="_blank" rel="noopener"><span>01</span>The Legends of Ren Zu</a>
+        <a href="#digital-production"><span>02</span>Digital Production</a>
+        <a href="https://www.youtube.com/@GodofPeakFiction" target="_blank" rel="noopener"><span>03</span>GodofPeakFiction</a>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section class="section digital-production" id="digital-production">
   <div class="kicker reveal">Digital Production</div>
