@@ -1761,6 +1761,32 @@ body::before{
 }
 @media (prefers-reduced-motion: reduce){ html.motion-ok .drift-planet{ animation:driftPlanetIdle 8s ease-in-out infinite !important; } }
 
+
+
+/* ====================================================
+   OMNIARCH V36 — draggable planet hit-test repair
+   ==================================================== */
+.hero{ position:relative; }
+#driftPlanet.drift-planet{
+  position:absolute !important;
+  z-index:80 !important;
+  pointer-events:auto !important;
+  touch-action:none !important;
+  -webkit-user-select:none;
+  user-select:none;
+  cursor:grab;
+  will-change:left,top,transform;
+}
+#driftPlanet.drift-planet.dragging{
+  cursor:grabbing !important;
+  animation:none !important;
+  opacity:1 !important;
+  transform:translate(-50%,-50%) scale(1.08) !important;
+}
+#driftPlanet.drift-planet.dragging::after{ filter:blur(7px); opacity:1; }
+/* keep hero text/buttons above normal backgrounds, but below the draggable object */
+.hero-inner{ position:relative; z-index:30 !important; }
+
 </style>
 <script type="application/ld+json">
 {
@@ -1819,27 +1845,47 @@ body::before{
   }
 }
 
-/* ============ DRAGGABLE LANDING WORLD SEED ============ */
+
+/* ============ DRAGGABLE LANDING WORLD SEED — repaired direct hero control ============ */
 (function(){
   var planet=document.getElementById('driftPlanet');
   var hero=document.querySelector('.hero');
   if(!planet || !hero) return;
-  var dragging=false, startX=0, startY=0, startLeft=0, startTop=0;
+  var dragging=false;
   function setByClient(x,y){
     var r=hero.getBoundingClientRect();
     var px=((x-r.left)/r.width)*100;
     var py=((y-r.top)/r.height)*100;
-    px=Math.max(7,Math.min(93,px)); py=Math.max(8,Math.min(88,py));
+    px=Math.max(5,Math.min(95,px));
+    py=Math.max(7,Math.min(91,py));
     planet.style.setProperty('--planet-x', px.toFixed(2)+'%');
     planet.style.setProperty('--planet-y', py.toFixed(2)+'%');
   }
-  planet.addEventListener('pointerdown', function(e){
-    dragging=true; planet.classList.add('dragging'); setByClient(e.clientX,e.clientY);
+  function down(e){
+    dragging=true;
+    planet.classList.add('dragging');
+    setByClient(e.clientX,e.clientY);
+    e.preventDefault();
     try{ planet.setPointerCapture(e.pointerId); }catch(err){}
-  });
-  planet.addEventListener('pointermove', function(e){ if(dragging) setByClient(e.clientX,e.clientY); });
-  function end(){ dragging=false; planet.classList.remove('dragging'); }
-  planet.addEventListener('pointerup', end); planet.addEventListener('pointercancel', end);
+  }
+  function move(e){
+    if(!dragging) return;
+    setByClient(e.clientX,e.clientY);
+    e.preventDefault();
+  }
+  function up(e){
+    dragging=false;
+    planet.classList.remove('dragging');
+    try{ planet.releasePointerCapture(e.pointerId); }catch(err){}
+  }
+  planet.addEventListener('pointerdown', down, {passive:false});
+  planet.addEventListener('pointermove', move, {passive:false});
+  planet.addEventListener('pointerup', up);
+  planet.addEventListener('pointercancel', up);
+  // Mouse fallback for older Android browsers / desktop edge cases.
+  planet.addEventListener('mousedown', function(e){ dragging=true; planet.classList.add('dragging'); setByClient(e.clientX,e.clientY); e.preventDefault(); });
+  window.addEventListener('mousemove', function(e){ if(dragging){ setByClient(e.clientX,e.clientY); e.preventDefault(); } }, {passive:false});
+  window.addEventListener('mouseup', function(){ dragging=false; planet.classList.remove('dragging'); });
 })();
 
 </script>
@@ -1904,7 +1950,6 @@ body::before{
     <span class="meteor meteor-a"></span><span class="meteor meteor-b"></span>
     <span class="light-blueprint"><i></i><b></b></span>
     <span class="light-sunburst"></span><span class="light-orbit lo1"></span><span class="light-orbit lo2"></span><span class="light-comet"></span><span class="light-planet lp1"></span><span class="light-planet lp2"></span>
-    <button class="drift-planet" id="driftPlanet" type="button" aria-label="Move the world seed"></button>
   </div>
   <div class="hero-inner">
     <div class="hero-content">
@@ -1929,6 +1974,7 @@ body::before{
       </div>
     </div>
   </div>
+  <button class="drift-planet" id="driftPlanet" type="button" aria-label="Move the world seed"></button>
 </header>
 <div class="ticker-bar" aria-hidden="true">
   <div class="ticker-track">
