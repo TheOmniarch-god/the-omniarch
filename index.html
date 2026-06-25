@@ -1799,6 +1799,134 @@ body::before{
 .works-grid .wcard .wf a{ text-decoration:underline; text-decoration-color:rgba(156,122,30,.35); }
 .works-grid .wcard{ min-height:100%; }
 
+
+
+/* ====================================================
+   OMNIARCH V38 — repair pass: no grain, no page lines, portfolio tab, free bodies
+   ==================================================== */
+/* Revert grain/hidden borders. Keep clean colour and atmosphere, no gritty overlay, no demarcation scratches. */
+.majd-texture{ display:none !important; }
+body::before,body::after,.hero::after,.wrap::before,.section::after{ display:none !important; content:none !important; }
+body{
+  background:#f6efdf !important;
+  background-image:
+    radial-gradient(ellipse at 10% 8%, rgba(255,255,255,.62), transparent 36%),
+    radial-gradient(ellipse at 88% 18%, rgba(212,178,90,.12), transparent 31%),
+    radial-gradient(ellipse at 12% 88%, rgba(44,68,54,.05), transparent 34%),
+    linear-gradient(145deg,#f8f2e5 0%,#eadbbb 46%,#faf6eb 100%) !important;
+}
+.hero{ border-bottom:0 !important; }
+
+/* Ren Zu hover/touch/readability: when the darker green/black artwork appears, text becomes light. */
+.featured-build:hover .fb-body,
+.featured-build:focus-within .fb-body,
+.featured-build.touch-open .fb-body{
+  background:linear-gradient(145deg,#07110f,#17312c 58%,#e7ead8 180%) !important;
+  color:var(--paper) !important;
+}
+.featured-build:hover .fb-body p,
+.featured-build:focus-within .fb-body p,
+.featured-build.touch-open .fb-body p,
+.featured-build:hover .fb-body .fb-label,
+.featured-build:focus-within .fb-body .fb-label,
+.featured-build.touch-open .fb-body .fb-label{ color:rgba(247,243,232,.74) !important; }
+.featured-build:hover .fb-body strong,
+.featured-build:focus-within .fb-body strong,
+.featured-build.touch-open .fb-body strong{ color:#f3f0d8 !important; }
+.featured-build:hover .fb-body .btn-line,
+.featured-build:focus-within .fb-body .btn-line,
+.featured-build.touch-open .fb-body .btn-line{ border-color:rgba(247,243,232,.32) !important; color:var(--paper) !important; }
+
+/* Portfolio is now one large tabbed system, not small dead cards. */
+.works-grid{ display:none !important; }
+.portfolio-system{
+  margin-top:42px; display:grid; grid-template-columns:1.08fr .92fr; min-height:430px;
+  border:1px solid rgba(21,18,12,.13); border-radius:var(--r-lg); overflow:hidden;
+  background:var(--paper-card); box-shadow:0 34px 90px -62px rgba(21,18,12,.7);
+}
+.portfolio-visual{ position:relative; min-height:430px; background:#080705; overflow:hidden; }
+.portfolio-visual::before{ content:''; position:absolute; inset:-35%; background:conic-gradient(from 0deg, transparent, rgba(212,178,90,.24), transparent, rgba(179,51,30,.14), transparent); animation:portfolioOrbit 18s linear infinite; filter:blur(16px); }
+.portfolio-panel{ position:absolute; inset:0; display:flex; align-items:flex-end; padding:42px; opacity:0; transform:scale(1.04); transition:opacity .55s var(--ease), transform .75s var(--ease); }
+.portfolio-panel.active{ opacity:1; transform:scale(1); }
+.portfolio-panel strong{ position:relative; z-index:1; font-family:var(--display); font-size:clamp(28px,4.5vw,54px); line-height:.98; letter-spacing:-.065em; color:var(--paper); text-shadow:0 22px 42px rgba(0,0,0,.5); }
+.portfolio-panel[data-ps-panel="renzu"]{ background:linear-gradient(135deg,rgba(7,6,4,.28),rgba(7,6,4,.72)), url('/assets/renzu-gu.webp?v=29') center 62%/cover; }
+.portfolio-panel[data-ps-panel="product"]{ background:radial-gradient(circle at 38% 35%,rgba(212,178,90,.32),transparent 28%), linear-gradient(135deg,#0b0a08,#32220e 56%,#090806); }
+.portfolio-panel[data-ps-panel="media"]{ background:radial-gradient(circle at 48% 35%,rgba(255,0,51,.34),transparent 27%), linear-gradient(135deg,#070707,#251016 58%,#080405); }
+.portfolio-panel[data-ps-panel="environment"]{ background:radial-gradient(circle at 50% 34%,rgba(212,178,90,.33),transparent 28%), conic-gradient(from 40deg,#030302,#291b07,#080806,#39100b,#030302); }
+.orbital-mark{ position:absolute; right:10%; top:18%; width:180px; height:180px; border-radius:50%; border:1px solid rgba(212,178,90,.28); box-shadow:inset 0 0 0 34px rgba(212,178,90,.035); animation:portfolioMark 9s ease-in-out infinite; }
+.portfolio-copy{ padding:36px; display:flex; flex-direction:column; justify-content:center; }
+.portfolio-tabs{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:28px; }
+.portfolio-tabs button{ padding:9px 12px; border:1px solid rgba(21,18,12,.12); border-radius:999px; background:rgba(255,255,255,.24); color:var(--ink-faint); font-family:var(--mono); font-size:11px; cursor:pointer; transition:.25s var(--ease); }
+.portfolio-tabs button.active,.portfolio-tabs button:hover{ color:var(--seal); border-color:rgba(179,51,30,.35); background:rgba(179,51,30,.055); }
+.portfolio-content{ display:none; }
+.portfolio-content.active{ display:block; animation:portfolioRise .42s var(--ease); }
+.portfolio-content h3{ font-family:var(--display)!important; font-size:clamp(28px,4vw,46px); letter-spacing:-.06em; line-height:1; margin:10px 0 14px; }
+.portfolio-content p{ color:var(--ink-soft); font-size:15.5px; line-height:1.65; max-width:440px; margin-bottom:24px; }
+@keyframes portfolioOrbit{ to{ transform:rotate(360deg); } }
+@keyframes portfolioMark{ 0%,100%{ transform:rotate(-12deg) scale(.94); } 50%{ transform:rotate(10deg) scale(1.04); } }
+@keyframes portfolioRise{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:translateY(0); } }
+@media(max-width:850px){ .portfolio-system{ grid-template-columns:1fr; } .portfolio-visual{ min-height:320px; } .portfolio-copy{ padding:26px; } }
+
+/* Truly movable landing bodies: direct hero children, high z-index, not trapped behind cosmic layers. */
+.free-body{ position:absolute !important; z-index:120 !important; pointer-events:auto !important; touch-action:none !important; -webkit-user-select:none; user-select:none; cursor:grab; }
+.free-body.dragging{ cursor:grabbing !important; animation:none !important; opacity:1 !important; }
+.body-moon{ left:16%; top:25%; width:38px; height:38px; border-radius:50%; border:0; background:radial-gradient(circle at 34% 26%,#fff8da,#8a7440 35%,#080705 80%); box-shadow:inset -8px -9px 16px rgba(0,0,0,.55),0 0 18px rgba(212,178,90,.18); opacity:.62; animation:driftPlanetIdle 10s ease-in-out infinite reverse; }
+.body-comet{ left:66%; top:70%; width:58px; height:18px; border-radius:999px; border:0; background:linear-gradient(90deg,rgba(212,178,90,.95),rgba(255,248,216,.5),transparent); box-shadow:0 0 18px rgba(212,178,90,.26); opacity:.58; transform:rotate(-18deg); animation:bodyCometIdle 9s ease-in-out infinite; }
+@keyframes bodyCometIdle{ 0%,100%{ translate:0 0; } 50%{ translate:16px -12px; } }
+@media(max-width:760px){ .body-moon{ left:12%; top:18%; } .body-comet{ left:62%; top:76%; } }
+
+
+
+/* ====================================================
+   OMNIARCH V39 — portfolio repair / standalone showcase
+   ==================================================== */
+/* Hide the failed tabbed experiment and restore the previous systems grid. */
+.portfolio-system{ display:none !important; }
+.works-grid{ display:grid !important; }
+
+/* Standalone portfolio panel, separate from Ren Zu and before Digital Production. */
+.portfolio-gate{ padding-top:76px; padding-bottom:36px; }
+.portfolio-gate-inner{
+  display:grid; grid-template-columns:1.05fr .95fr; min-height:440px;
+  border:1px solid rgba(21,18,12,.13); border-radius:var(--r-lg); overflow:hidden;
+  background:linear-gradient(145deg,#11100d,#2d210f 56%,#090806);
+  box-shadow:0 34px 90px -62px rgba(21,18,12,.75);
+}
+.portfolio-gate-art{ position:relative; min-height:440px; overflow:hidden; background:#070604; }
+.portfolio-gate-art::before{
+  content:''; position:absolute; inset:-30%;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(212,178,90,.42), transparent 18%),
+    conic-gradient(from 0deg, transparent, rgba(212,178,90,.28), transparent, rgba(179,51,30,.16), transparent);
+  filter:blur(18px); animation:pgSlowSpin 18s linear infinite;
+}
+.portfolio-gate-art::after{
+  content:''; position:absolute; inset:0;
+  background:
+    linear-gradient(90deg, rgba(7,6,4,.2), rgba(7,6,4,.72)),
+    url('/assets/hero-omniarch-square.webp?v=33') center/cover;
+  opacity:.72; mix-blend-mode:screen;
+}
+.pg-orbit{ position:absolute; z-index:2; left:50%; top:50%; width:68%; aspect-ratio:1/.46; border:1px solid rgba(212,178,90,.36); border-radius:50%; transform:translate(-50%,-50%) rotate(-18deg); animation:pgOrbit 9s ease-in-out infinite; }
+.pg-core{ position:absolute; z-index:3; left:50%; top:50%; width:96px; height:96px; border-radius:50%; transform:translate(-50%,-50%); background:radial-gradient(circle at 32% 24%,#fff8d8,#d4b25a 24%,#181106 72%); box-shadow:0 0 42px rgba(212,178,90,.38), inset -12px -15px 22px rgba(0,0,0,.48); }
+.pg-label{ position:absolute; z-index:4; left:34px; bottom:30px; color:rgba(247,243,232,.72); font-family:var(--mono); font-size:11px; letter-spacing:.16em; }
+.portfolio-gate-copy{ padding:42px; background:linear-gradient(145deg,#f8f1df,#e9d8b7); color:var(--ink); display:flex; flex-direction:column; justify-content:center; }
+.portfolio-gate-copy h2{ margin:0; }
+.portfolio-gate-copy .lead{ color:var(--ink-soft); margin-top:18px; }
+.pg-actions{ display:flex; gap:12px; flex-wrap:wrap; margin-top:28px; }
+.pg-mini-grid{ display:grid; gap:8px; margin-top:26px; }
+.pg-mini-grid a{ display:flex; align-items:center; gap:12px; padding:12px 14px; border:1px solid rgba(21,18,12,.1); border-radius:14px; background:rgba(255,255,255,.28); color:var(--ink); text-decoration:none; font-weight:700; transition:.25s var(--ease); }
+.pg-mini-grid a:hover{ border-color:rgba(179,51,30,.34); transform:translateX(4px); color:var(--seal); }
+.pg-mini-grid span{ font-family:var(--mono); font-size:10px; color:var(--seal); }
+@keyframes pgSlowSpin{ to{ transform:rotate(360deg); } }
+@keyframes pgOrbit{ 0%,100%{ transform:translate(-50%,-50%) rotate(-18deg) scale(.95); } 50%{ transform:translate(-50%,-50%) rotate(8deg) scale(1.04); } }
+@media(max-width:880px){
+  .portfolio-gate{ padding-top:54px; }
+  .portfolio-gate-inner{ grid-template-columns:1fr; min-height:auto; }
+  .portfolio-gate-art{ min-height:300px; }
+  .portfolio-gate-copy{ padding:28px; }
+}
+
 </style>
 <script type="application/ld+json">
 {
@@ -1900,6 +2028,47 @@ body::before{
   window.addEventListener('mouseup', function(){ dragging=false; planet.classList.remove('dragging'); });
 })();
 
+
+/* ============ V38 PORTFOLIO TABS + FREE LANDING BODIES ============ */
+(function(){
+  var root=document.getElementById('portfolioSystem');
+  if(root){
+    var tabs=root.querySelectorAll('[data-ps]');
+    function activate(id){
+      tabs.forEach(function(t){ t.classList.toggle('active', t.dataset.ps===id); });
+      root.querySelectorAll('.portfolio-content').forEach(function(p){ p.classList.toggle('active', p.id==='ps-'+id); });
+      root.querySelectorAll('.portfolio-panel').forEach(function(p){ p.classList.toggle('active', p.dataset.psPanel===id); });
+    }
+    tabs.forEach(function(t){ t.addEventListener('click', function(){ activate(t.dataset.ps); }); });
+  }
+
+  var hero=document.querySelector('.hero');
+  var bodies=document.querySelectorAll('.free-body');
+  if(hero && bodies.length){
+    bodies.forEach(function(body){
+      var dragging=false, offsetX=0, offsetY=0;
+      function place(clientX,clientY){
+        var r=hero.getBoundingClientRect();
+        var x=clientX-r.left-offsetX;
+        var y=clientY-r.top-offsetY;
+        body.style.left=x+'px'; body.style.top=y+'px';
+        body.style.setProperty('--planet-x', x+'px'); body.style.setProperty('--planet-y', y+'px');
+        body.style.transform='translate3d(0,0,0)';
+      }
+      body.addEventListener('pointerdown', function(e){
+        var b=body.getBoundingClientRect();
+        offsetX=e.clientX-b.left; offsetY=e.clientY-b.top;
+        dragging=true; body.classList.add('dragging');
+        try{ body.setPointerCapture(e.pointerId); }catch(err){}
+        e.preventDefault();
+      }, {passive:false});
+      body.addEventListener('pointermove', function(e){ if(!dragging) return; place(e.clientX,e.clientY); e.preventDefault(); }, {passive:false});
+      function release(e){ dragging=false; body.classList.remove('dragging'); try{ body.releasePointerCapture(e.pointerId); }catch(err){} }
+      body.addEventListener('pointerup', release); body.addEventListener('pointercancel', release);
+    });
+  }
+})();
+
 </script>
 </head>
 <body>
@@ -1933,6 +2102,7 @@ body::before{
   </button>
   <div class="menu-inner">
     <nav class="menu-links">
+      <a href="#portfolio" data-menu-go>Portfolio</a>
       <a href="#digital-production" data-menu-go>Production</a>
       <a href="#studio" data-menu-go>Studio</a>
       <a href="#works" data-menu-go>Works</a>
@@ -1986,7 +2156,9 @@ body::before{
       </div>
     </div>
   </div>
-  <button class="drift-planet" id="driftPlanet" type="button" aria-label="Move the world seed"></button>
+  <button class="drift-planet free-body" id="driftPlanet" type="button" aria-label="Move the world seed"></button>
+  <button class="free-body body-moon" type="button" aria-label="Move the dark moon"></button>
+  <button class="free-body body-comet" type="button" aria-label="Move the comet shard"></button>
 </header>
 <div class="ticker-bar" aria-hidden="true">
   <div class="ticker-track">
@@ -2012,6 +2184,31 @@ body::before{
     <span class="ticker-item">·</span>
   </div>
 </div>
+
+
+<section class="section portfolio-gate" id="portfolio">
+  <div class="portfolio-gate-inner reveal">
+    <div class="portfolio-gate-art" aria-hidden="true">
+      <span class="pg-orbit"></span>
+      <span class="pg-core"></span>
+      <div class="pg-label">PORTFOLIO / SYSTEMS</div>
+    </div>
+    <div class="portfolio-gate-copy">
+      <div class="kicker">Portfolio</div>
+      <h2>Featured<br><em>Systems.</em></h2>
+      <p class="lead">A clean map of The Omniarch's work: digital products, interactive worlds, media systems, and visual direction — each one treated as a living system.</p>
+      <div class="pg-actions">
+        <a class="btn-seal" href="#works">View Systems ↓</a>
+        <a class="btn-line" href="/environment">Enter Environment ↗</a>
+      </div>
+      <div class="pg-mini-grid" aria-label="Portfolio highlights">
+        <a href="https://thelegendsofrenzu.theomniarch.com.ng" target="_blank" rel="noopener"><span>01</span>The Legends of Ren Zu</a>
+        <a href="#digital-production"><span>02</span>Digital Production</a>
+        <a href="https://www.youtube.com/@GodofPeakFiction" target="_blank" rel="noopener"><span>03</span>GodofPeakFiction</a>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section class="section digital-production" id="digital-production">
   <div class="kicker reveal">Digital Production</div>
@@ -2076,6 +2273,48 @@ body::before{
     Featured<br><em>Systems.</em>
   </h2>
   <p class="lead reveal" style="transition-delay:.1s">A portfolio of builds, worlds, channels, and digital products — each one treated as a system, not a one-off asset.</p>
+
+  <div class="portfolio-system reveal" style="transition-delay:.14s" id="portfolioSystem">
+    <div class="portfolio-visual" aria-hidden="true">
+      <div class="portfolio-panel active" data-ps-panel="renzu"><span class="orbital-mark"></span><strong>The Legends<br>of Ren Zu</strong></div>
+      <div class="portfolio-panel" data-ps-panel="product"><span class="orbital-mark"></span><strong>Digital<br>Production</strong></div>
+      <div class="portfolio-panel" data-ps-panel="media"><span class="orbital-mark"></span><strong>GodofPeak<br>Fiction</strong></div>
+      <div class="portfolio-panel" data-ps-panel="environment"><span class="orbital-mark"></span><strong>The Omniarch<br>Environment</strong></div>
+    </div>
+    <div class="portfolio-copy">
+      <div class="portfolio-tabs" role="tablist" aria-label="Featured systems">
+        <button class="active" data-ps="renzu" type="button">Ren Zu</button>
+        <button data-ps="product" type="button">Digital Production</button>
+        <button data-ps="media" type="button">Channel</button>
+        <button data-ps="environment" type="button">Environment</button>
+      </div>
+      <div class="portfolio-content active" id="ps-renzu">
+        <div class="wt">Interactive World</div>
+        <h3>The Legends of Ren Zu</h3>
+        <p>An original tragedy engineered into an illustrated reading system and standalone web experience.</p>
+        <a class="btn-line" href="https://thelegendsofrenzu.theomniarch.com.ng" target="_blank" rel="noopener">Open Build ↗</a>
+      </div>
+      <div class="portfolio-content" id="ps-product">
+        <div class="wt">Digital Product Service</div>
+        <h3>Large-scale digital production</h3>
+        <p>Websites, interfaces, brand systems, payment-ready pages, and digital product packages built for launch and iteration.</p>
+        <a class="btn-line" href="#digital-production">View Services ↓</a>
+      </div>
+      <div class="portfolio-content" id="ps-media">
+        <div class="wt">Media System</div>
+        <h3>GodofPeakFiction</h3>
+        <p>A commentary and content system for webnovels, manhwa, and peak fiction culture across YouTube and TikTok.</p>
+        <a class="btn-line" href="https://www.youtube.com/@GodofPeakFiction" target="_blank" rel="noopener">Open Channel ↗</a>
+      </div>
+      <div class="portfolio-content" id="ps-environment">
+        <div class="wt">Experimental Portal</div>
+        <h3>The Omniarch Environment</h3>
+        <p>A separate interactive journey through the systems, worlds, and services of The Omniarch.</p>
+        <a class="btn-line" href="/environment">Enter Environment ↗</a>
+      </div>
+    </div>
+  </div>
+
   <div class="works-grid">
     <div class="wcard reveal" style="transition-delay:.12s">
       <div class="wthumb" style="background: linear-gradient(150deg, #efe3c4, #e3d4a3);">Software<svg class="wstamp" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="32" r="27" fill="none" stroke="var(--ink)" stroke-width="2.5"/></svg></div>
