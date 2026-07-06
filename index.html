@@ -1927,6 +1927,63 @@ body{
   .portfolio-gate-copy{ padding:28px; }
 }
 
+
+
+/* ====================================================
+   OMNIARCH V41 — liquid squircle portal header + tangled finale
+   ==================================================== */
+/* The old 3D medallion hero is retired; the landing now uses a glass/liquid gateway. */
+.hero-inner{ grid-template-columns: .92fr 1.08fr !important; align-items:center !important; gap:44px !important; }
+.hero-portal-side{ position:relative; display:flex; align-items:center; justify-content:center; perspective:1200px; }
+.hero-portal-card{
+  width:min(560px,100%); min-height:430px; position:relative; overflow:hidden;
+  border-radius:42px;
+  border:1px solid rgba(247,243,232,.18);
+  background:linear-gradient(135deg, rgba(247,243,232,.12), rgba(247,243,232,.035));
+  box-shadow:0 38px 110px -58px rgba(0,0,0,.85), inset 0 1px 0 rgba(255,255,255,.18);
+  backdrop-filter:blur(22px) saturate(1.25);
+  transform:translateZ(0); animation:portalFloat 7s ease-in-out infinite;
+}
+.hero-portal-card::before{ content:''; position:absolute; inset:-45%; background:radial-gradient(circle at 35% 25%,rgba(212,178,90,.26),transparent 28%),radial-gradient(circle at 80% 80%,rgba(179,51,30,.18),transparent 32%),conic-gradient(from 0deg, transparent, rgba(255,255,255,.12), transparent); animation:portalLiquid 18s linear infinite; }
+.hero-portal-card::after{ content:''; position:absolute; inset:1px; border-radius:41px; background:linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.34)); pointer-events:none; }
+.portal-art{ position:absolute; inset:0; opacity:.74; }
+.portal-art img{ width:100%; height:100%; object-fit:cover; filter:saturate(1.05) contrast(1.08); transform:scale(1.03); }
+.portal-copy{ position:relative; z-index:2; min-height:430px; padding:34px; display:flex; flex-direction:column; justify-content:flex-end; color:var(--paper); }
+.portal-kicker{ font-family:var(--mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--gold-line); margin-bottom:10px; }
+.portal-copy h3{ font-family:var(--display) !important; font-size:clamp(28px,4vw,46px); line-height:.96; letter-spacing:-.06em; margin:0 0 10px; color:var(--paper); }
+.portal-copy p{ max-width:390px; color:rgba(247,243,232,.72); line-height:1.55; margin:0 0 22px; }
+.portal-links{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+.portal-links a{ display:flex; align-items:center; gap:10px; padding:13px 14px; border-radius:18px; border:1px solid rgba(247,243,232,.16); background:rgba(0,0,0,.26); color:var(--paper); text-decoration:none; font-weight:800; transition:.28s var(--ease); }
+.portal-links a span{ font-family:var(--mono); font-size:10px; color:var(--gold-line); }
+.portal-links a:hover,.portal-links a:focus-visible{ transform:translateY(-3px); border-color:rgba(212,178,90,.5); background:rgba(212,178,90,.11); }
+@keyframes portalFloat{ 0%,100%{ transform:translateY(0) rotateX(0deg) rotateY(0deg); } 50%{ transform:translateY(-10px) rotateX(1.5deg) rotateY(-2deg); } }
+@keyframes portalLiquid{ to{ transform:rotate(360deg); } }
+.hero-awakened .hero-portal-card{ border-color:rgba(21,18,12,.14); background:rgba(255,255,255,.22); box-shadow:0 30px 90px -62px rgba(21,18,12,.38), inset 0 1px 0 rgba(255,255,255,.55); }
+.hero-awakened .portal-copy{ color:var(--ink); }
+.hero-awakened .portal-copy h3{ color:var(--ink); }
+.hero-awakened .portal-copy p{ color:rgba(21,18,12,.68); }
+.hero-awakened .portal-links a{ background:rgba(255,255,255,.34); color:var(--ink); border-color:rgba(21,18,12,.12); }
+.free-body{ display:none !important; }
+@media(max-width:900px){ .hero-inner{ grid-template-columns:1fr !important; gap:28px !important; } .hero-portal-side{ order:2; } .hero-portal-card{ min-height:380px; border-radius:32px; } .portal-copy{ min-height:380px; padding:24px; } .portal-links{ grid-template-columns:1fr; } }
+
+/* Full-screen tangled finale, inspired by kinetic thread signage. */
+.tangle-sign{ min-height:100svh; position:relative; overflow:hidden; display:grid; place-items:center; padding:70px 20px; isolation:isolate; background:radial-gradient(ellipse at 50% 20%,rgba(212,178,90,.13),transparent 32%),linear-gradient(180deg,#f8f1df,#ead8b6); }
+.tangle-svg{ position:absolute; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; }
+.tangle-svg path{ fill:none; stroke:rgba(156,122,30,.34); stroke-width:1.4; stroke-linecap:round; stroke-dasharray:1600; stroke-dashoffset:1600; filter:drop-shadow(0 0 5px rgba(212,178,90,.12)); }
+.tangle-sign.in .tangle-svg path{ animation:threadDraw 2.2s ease forwards; animation-delay:calc(var(--d,0) * .1s); }
+.tangle-svg path:nth-child(2){ --d:1; stroke:rgba(21,18,12,.22); }.tangle-svg path:nth-child(3){ --d:2; }.tangle-svg path:nth-child(4){ --d:3; stroke:rgba(179,51,30,.18); }.tangle-svg path:nth-child(5){ --d:4; }
+.tangle-inner{ position:relative; z-index:1; text-align:center; }
+.tangle-kicker{ font-family:var(--mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--seal); margin-bottom:26px; }
+.tangle-word{ display:flex; align-items:center; justify-content:center; gap:clamp(4px,1vw,14px); flex-wrap:nowrap; white-space:nowrap; }
+.tangle-word i{ width:clamp(12px,2vw,30px); }
+.tangle-word span{ display:inline-grid; place-items:center; width:clamp(38px,7.4vw,108px); aspect-ratio:1/1.05; border-radius:22%; background:#11100d; color:var(--gold-line); font-family:'Rosehot Omniarch',var(--display),serif; font-size:clamp(28px,5.4vw,78px); box-shadow:0 24px 60px -42px rgba(21,18,12,.82), inset 0 1px 0 rgba(255,255,255,.08); opacity:0; transform:translateY(-180px) rotate(var(--r)); }
+.tangle-sign.in .tangle-word span{ animation:tangleDrop 1.25s cubic-bezier(.17,.88,.2,1.18) forwards, tangleSway 5.4s ease-in-out 1.3s infinite; animation-delay:calc(var(--i)*.065s), calc(1.2s + var(--i)*.06s); }
+.tangle-inner p{ font-family:var(--mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-faint); margin-top:24px; white-space:nowrap; }
+@keyframes threadDraw{ to{ stroke-dashoffset:0; } }
+@keyframes tangleDrop{ 0%{ opacity:0; transform:translateY(-180px) rotate(calc(var(--r)*2)); } 58%{ opacity:1; transform:translateY(18px) rotate(calc(var(--r)*-1)); } 78%{ transform:translateY(-9px) rotate(calc(var(--r)*.45)); } 100%{ opacity:1; transform:translateY(0) rotate(0deg); } }
+@keyframes tangleSway{ 0%,100%{ transform:rotate(-.9deg); } 50%{ transform:rotate(.9deg); } }
+@media(max-width:640px){ .tangle-word span{ width:clamp(25px,7.2vw,48px); font-size:clamp(20px,5vw,34px); } .tangle-word{ gap:3px; } .tangle-inner p{ font-size:9px; } }
+
 </style>
 <script type="application/ld+json">
 {
@@ -2102,11 +2159,11 @@ body{
   </button>
   <div class="menu-inner">
     <nav class="menu-links">
-      <a href="#portfolio" data-menu-go>Portfolio</a>
+      <a href="/portfolio">Portfolio</a>
       <a href="#digital-production" data-menu-go>Production</a>
       <a href="#studio" data-menu-go>Studio</a>
-      <a href="#works" data-menu-go>Works</a>
-      <a href="#channel" data-menu-go><em>Channel</em></a>
+      <a href="/builds">Builds</a>
+      <a href="/channels"><em>Channels</em></a>
       <a href="#dossier" data-menu-go>Dossier</a>
       <a href="#contact" data-menu-go>Contact</a>
     </nav>
@@ -2147,18 +2204,23 @@ body{
         <a class="btn-line" href="#channel">Open the Channel</a>
       </div>
     </div>
-    <div class="hero-art-side">
-      <div class="hero-art-glow"></div>
-      <div class="hero-art-ring">
-        <div class="hero-art-inner">
-          <img src="/assets/hero-omniarch-square.webp?v=33" alt="The Omniarch" draggable="false" decoding="async" fetchpriority="high">
+    <div class="hero-portal-side">
+      <div class="hero-portal-card" aria-label="The Omniarch navigation portal">
+        <div class="portal-art"><img src="/assets/omniarch-minimal-logo.webp?v=41" alt="The Omniarch minimal cosmos logo" loading="eager" decoding="async"></div>
+        <div class="portal-copy">
+          <div class="portal-kicker">The Omniarch Gateway</div>
+          <h3>Choose a system.</h3>
+          <p>Portfolio, channels, builds, and the experimental environment each open as their own page.</p>
+          <nav class="portal-links" aria-label="Gateway links">
+            <a href="/portfolio"><span>01</span>Portfolio</a>
+            <a href="/channels"><span>02</span>Channels</a>
+            <a href="/builds"><span>03</span>Builds</a>
+            <a href="/environment"><span>04</span>Environment</a>
+          </nav>
         </div>
       </div>
     </div>
   </div>
-  <button class="drift-planet free-body" id="driftPlanet" type="button" aria-label="Move the world seed"></button>
-  <button class="free-body body-moon" type="button" aria-label="Move the dark moon"></button>
-  <button class="free-body body-comet" type="button" aria-label="Move the comet shard"></button>
 </header>
 <div class="ticker-bar" aria-hidden="true">
   <div class="ticker-track">
@@ -2500,12 +2562,23 @@ body{
 </section>
 
 
-<section class="hanging-sign reveal" aria-label="The Omniarch signature">
-  <div class="hanger-rig" aria-hidden="true"><span></span></div>
-  <div class="hanging-word" aria-hidden="true">
-    <span class="hang-letter" style="--i:0; --r:-6deg"><span class="rope"></span><b>T</b></span><span class="hang-letter" style="--i:1; --r:-3deg"><span class="rope"></span><b>H</b></span><span class="hang-letter" style="--i:2; --r:0deg"><span class="rope"></span><b>E</b></span><span class="hang-space" aria-hidden="true"></span><span class="hang-letter" style="--i:4; --r:-6deg"><span class="rope"></span><b>O</b></span><span class="hang-letter" style="--i:5; --r:-3deg"><span class="rope"></span><b>M</b></span><span class="hang-letter" style="--i:6; --r:0deg"><span class="rope"></span><b>N</b></span><span class="hang-letter" style="--i:7; --r:3deg"><span class="rope"></span><b>I</b></span><span class="hang-letter" style="--i:8; --r:-6deg"><span class="rope"></span><b>A</b></span><span class="hang-letter" style="--i:9; --r:-3deg"><span class="rope"></span><b>R</b></span><span class="hang-letter" style="--i:10; --r:0deg"><span class="rope"></span><b>C</b></span><span class="hang-letter" style="--i:11; --r:3deg"><span class="rope"></span><b>H</b></span>
+<section class="tangle-sign reveal" aria-label="The Omniarch tangled signature">
+  <svg class="tangle-svg" viewBox="0 0 1400 760" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M30 160 C260 40 340 360 560 180 S920 20 1360 150" />
+    <path d="M-40 430 C210 220 380 670 650 350 S1030 190 1440 520" />
+    <path d="M80 690 C260 500 460 610 640 430 S960 300 1320 670" />
+    <path d="M180 40 C240 260 430 280 520 520 S840 670 980 130 S1190 60 1360 250" />
+    <path d="M10 315 C260 390 300 100 520 260 S760 610 1010 350 S1210 120 1420 300" />
+  </svg>
+  <div class="tangle-inner">
+    <div class="tangle-kicker">Architect of the Cosmos</div>
+    <div class="tangle-word" aria-hidden="true">
+      <span style="--i:0;--r:-8deg">T</span><span style="--i:1;--r:5deg">H</span><span style="--i:2;--r:-3deg">E</span>
+      <i></i>
+      <span style="--i:4;--r:7deg">O</span><span style="--i:5;--r:-6deg">M</span><span style="--i:6;--r:4deg">N</span><span style="--i:7;--r:-4deg">I</span><span style="--i:8;--r:8deg">A</span><span style="--i:9;--r:-7deg">R</span><span style="--i:10;--r:4deg">C</span><span style="--i:11;--r:-5deg">H</span>
+    </div>
+    <p>One name. Many systems.</p>
   </div>
-  <p class="hanging-caption">Architect of the Cosmos · one name, many systems.</p>
 </section>
 
 <footer class="footer-clean">
