@@ -2041,6 +2041,55 @@ h2 em,.hero-stack em,.portfolio-gate-copy h2 em{ color:var(--omni-secondary) !im
 .tangle-sign{ background:radial-gradient(ellipse at 50% 20%,rgba(212,178,90,.13),transparent 32%),linear-gradient(180deg,#FAF3DF,#EBD8B3) !important; }
 .tangle-word span{ background:var(--omni-primary) !important; color:var(--omni-secondary) !important; }
 
+
+
+/* ====================================================
+   OMNIARCH V43 — simplified landing, clean palette, replay finale
+   ==================================================== */
+/* Clean primary/secondary palette for the main site background. No mixed colour wash. */
+.page-aurora{ display:none !important; }
+body{
+  background:#F3E7CB !important;
+  background-image:linear-gradient(180deg,#F8F1DF 0%,#F3E7CB 52%,#F8F1DF 100%) !important;
+}
+body::before,body::after,.wrap::before,.section::after{ display:none !important; content:none !important; }
+.ink-field .b1,.ink-field .b2,.ink-field .b3{ opacity:.08 !important; }
+
+/* Minimal professional landing: no portal card in hero. Users scroll into the site. */
+.hero-inner{
+  display:grid !important;
+  grid-template-columns:minmax(0,760px) !important;
+  justify-content:start !important;
+  max-width:1180px !important;
+  padding-left:clamp(24px,8vw,96px) !important;
+  padding-right:24px !important;
+}
+.hero-content{ max-width:760px; }
+.hero-portal-side,.hero-portal-card{ display:none !important; }
+.hero::before{ opacity:.82; }
+.hero-sub{ max-width:590px !important; }
+.hero-cta .btn-line{ opacity:.9; }
+@media(max-width:900px){
+  .hero-inner{ padding-left:22px !important; padding-right:22px !important; justify-content:center !important; }
+  .hero-content{ align-items:flex-start !important; text-align:left !important; }
+  .hero-sub{ text-align:left !important; }
+  .hero-cta{ justify-content:flex-start !important; }
+}
+
+/* Keep the environment gate as the entry point lower on the page, not in the hero. */
+.environment-gate .portfolio-gate-copy{ background:#F8F1DF !important; }
+.environment-gate .portfolio-gate-inner{ box-shadow:0 34px 90px -62px rgba(10,8,5,.72) !important; }
+
+/* Hide any menu overlay leakage and remove clutter line risk. */
+.menu-overlay{ overflow:hidden !important; }
+.menu-side .menu-contact{ margin-top:16px; }
+
+/* Tangle finale replay uses a dedicated .play class; it restarts whenever bottom comes into view. */
+.tangle-sign.play .tangle-svg path{ animation:threadDraw 2.2s ease forwards !important; }
+.tangle-sign.play .tangle-word span{ animation:tangleDrop 1.25s cubic-bezier(.17,.88,.2,1.18) forwards, tangleSway 5.4s ease-in-out 1.3s infinite !important; animation-delay:calc(var(--i)*.065s), calc(1.2s + var(--i)*.06s) !important; }
+.tangle-sign:not(.play) .tangle-svg path{ stroke-dashoffset:1600; }
+.tangle-sign:not(.play) .tangle-word span{ opacity:0; transform:translateY(-180px) rotate(var(--r)); }
+
 </style>
 <script type="application/ld+json">
 {
@@ -2184,24 +2233,31 @@ h2 em,.hero-stack em,.portfolio-gate-copy h2 em{ color:var(--omni-secondary) !im
 })();
 
 
-/* ============ V42 REPLAY TANGLED FINALE ON EVERY BOTTOM SCROLL ============ */
+
+
+
+/* ============ V43 ROBUST TANGLED FINALE REPLAY ============ */
 (function(){
   var sign=document.querySelector('.tangle-sign');
-  if(!sign || !('IntersectionObserver' in window)) return;
-  var obs=new IntersectionObserver(function(entries){
-    entries.forEach(function(en){
-      if(en.isIntersecting){
-        sign.classList.add('replay');
-        sign.classList.remove('in');
-        void sign.offsetWidth;
-        sign.classList.remove('replay');
-        sign.classList.add('in');
-      }else{
-        sign.classList.remove('in');
-      }
-    });
-  },{threshold:.28});
-  obs.observe(sign);
+  if(!sign) return;
+  var inside=false;
+  function visible(){
+    var r=sign.getBoundingClientRect();
+    return r.top < window.innerHeight*0.72 && r.bottom > window.innerHeight*0.18;
+  }
+  function replay(){
+    sign.classList.remove('play','in');
+    void sign.offsetWidth;
+    sign.classList.add('play','in');
+  }
+  function onScroll(){
+    var v=visible();
+    if(v && !inside){ inside=true; replay(); }
+    if(!v && inside){ inside=false; sign.classList.remove('play','in'); }
+  }
+  document.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', onScroll);
+  setTimeout(onScroll, 100);
 })();
 
 </script>
@@ -2247,11 +2303,10 @@ h2 em,.hero-stack em,.portfolio-gate-copy h2 em{ color:var(--omni-secondary) !im
     </nav>
     <div class="menu-side">
       <strong>The Omniarch</strong>
-      Independent builder — software, interactive worlds, brand systems, original commentary.<br>Large-scale production · global remote
+      Digital products, interactive worlds, brand systems, and media architecture — built under one name.
       <div class="menu-contact">
         Email: <a href="#" id="menuEmailLink">···</a><br>
-        YouTube: <a href="https://www.youtube.com/@GodofPeakFiction" target="_blank" rel="noopener">@GodofPeakFiction</a><br>
-        Built: <a href="https://thelegendsofrenzu.theomniarch.com.ng" target="_blank" rel="noopener">The Legends of Ren Zu ↗</a>
+        YouTube: <a href="https://www.youtube.com/@GodofPeakFiction" target="_blank" rel="noopener">@GodofPeakFiction</a>
       </div>
     </div>
   </div>
@@ -2282,23 +2337,7 @@ h2 em,.hero-stack em,.portfolio-gate-copy h2 em{ color:var(--omni-secondary) !im
         <a class="btn-line" href="#channel">Open the Channel</a>
       </div>
     </div>
-    <div class="hero-portal-side">
-      <div class="hero-portal-card" aria-label="The Omniarch navigation portal">
-        <div class="portal-art"><img src="/assets/omniarch-minimal-logo.webp?v=41" alt="The Omniarch minimal cosmos logo" loading="eager" decoding="async"></div>
-        <div class="portal-copy">
-          <div class="portal-kicker">The Omniarch Gateway</div>
-          <h3>Choose a system.</h3>
-          <p>Portfolio, channels, builds, and the experimental environment each open as their own page.</p>
-          <nav class="portal-links" aria-label="Gateway links">
-            <a href="/portfolio"><span>01</span>Portfolio</a>
-            <a href="/channels"><span>02</span>Channels</a>
-            <a href="/builds"><span>03</span>Builds</a>
-            <a href="/environment"><span>04</span>Environment</a>
-          </nav>
-        </div>
-      </div>
-    </div>
-  </div>
+</div>
 </header>
 <div class="ticker-bar" aria-hidden="true">
   <div class="ticker-track">
