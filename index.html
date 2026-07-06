@@ -1984,6 +1984,63 @@ body{
 @keyframes tangleSway{ 0%,100%{ transform:rotate(-.9deg); } 50%{ transform:rotate(.9deg); } }
 @media(max-width:640px){ .tangle-word span{ width:clamp(25px,7.2vw,48px); font-size:clamp(20px,5vw,34px); } .tangle-word{ gap:3px; } .tangle-inner p{ font-size:9px; } }
 
+
+
+/* ====================================================
+   OMNIARCH V42 — environment gate + consistent palette
+   ==================================================== */
+:root{
+  --omni-primary:#0A0805;
+  --omni-secondary:#D4B25A;
+  --omni-paper:#F3E7CB;
+  --omni-paper-2:#FBF6E9;
+  --omni-accent:#B3331E;
+}
+body{
+  background:linear-gradient(145deg,var(--omni-paper-2),var(--omni-paper) 54%,#EFE1BE) !important;
+}
+.btn-seal{ background:var(--omni-primary) !important; color:var(--omni-secondary) !important; border:1px solid rgba(212,178,90,.22); }
+.btn-seal:hover{ background:#17120A !important; color:#F7F3E8 !important; }
+.btn-line{ border-color:rgba(10,8,5,.18) !important; color:var(--omni-primary) !important; }
+.btn-line:hover{ border-color:var(--omni-secondary) !important; color:#8C6A16 !important; }
+.kicker,.wt,.fb-label,.portfolio-gate .kicker{ color:var(--omni-accent) !important; }
+h2 em,.hero-stack em,.portfolio-gate-copy h2 em{ color:var(--omni-secondary) !important; }
+/* Environment gate uses the official primary/secondary color system. */
+.environment-gate .portfolio-gate-inner{
+  border-color:rgba(10,8,5,.18) !important;
+  background:var(--omni-primary) !important;
+}
+.environment-gate .portfolio-gate-art{
+  background:var(--omni-primary) !important;
+}
+.environment-gate .portfolio-gate-art::after{
+  background:
+    linear-gradient(90deg,rgba(10,8,5,.06),rgba(10,8,5,.74)),
+    url('/assets/omniarch-minimal-logo.webp?v=41') center/cover !important;
+  opacity:.9 !important;
+  mix-blend-mode:normal !important;
+}
+.environment-gate .portfolio-gate-copy{
+  background:linear-gradient(145deg,#FAF3DF,var(--omni-paper)) !important;
+  color:var(--omni-primary) !important;
+}
+.environment-gate .pg-core{
+  background:radial-gradient(circle at 32% 24%,#fff8da,var(--omni-secondary) 24%,#181106 72%) !important;
+}
+.environment-gate .pg-mini-grid a{
+  border-color:rgba(10,8,5,.12) !important;
+  background:rgba(255,255,255,.35) !important;
+}
+.environment-gate .pg-mini-grid a:hover{
+  color:var(--omni-accent) !important;
+  border-color:rgba(179,51,30,.32) !important;
+}
+/* Tangle animation should replay cleanly whenever bottom is reached. */
+.tangle-sign.replay .tangle-svg path,
+.tangle-sign.replay .tangle-word span{ animation:none !important; }
+.tangle-sign{ background:radial-gradient(ellipse at 50% 20%,rgba(212,178,90,.13),transparent 32%),linear-gradient(180deg,#FAF3DF,#EBD8B3) !important; }
+.tangle-word span{ background:var(--omni-primary) !important; color:var(--omni-secondary) !important; }
+
 </style>
 <script type="application/ld+json">
 {
@@ -2126,6 +2183,27 @@ body{
   }
 })();
 
+
+/* ============ V42 REPLAY TANGLED FINALE ON EVERY BOTTOM SCROLL ============ */
+(function(){
+  var sign=document.querySelector('.tangle-sign');
+  if(!sign || !('IntersectionObserver' in window)) return;
+  var obs=new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting){
+        sign.classList.add('replay');
+        sign.classList.remove('in');
+        void sign.offsetWidth;
+        sign.classList.remove('replay');
+        sign.classList.add('in');
+      }else{
+        sign.classList.remove('in');
+      }
+    });
+  },{threshold:.28});
+  obs.observe(sign);
+})();
+
 </script>
 </head>
 <body>
@@ -2248,25 +2326,25 @@ body{
 </div>
 
 
-<section class="section portfolio-gate" id="portfolio">
+<section class="section portfolio-gate environment-gate" id="portfolio">
   <div class="portfolio-gate-inner reveal">
     <div class="portfolio-gate-art" aria-hidden="true">
       <span class="pg-orbit"></span>
       <span class="pg-core"></span>
-      <div class="pg-label">PORTFOLIO / SYSTEMS</div>
+      <div class="pg-label">ENVIRONMENT / PORTAL</div>
     </div>
     <div class="portfolio-gate-copy">
-      <div class="kicker">Portfolio</div>
-      <h2>Featured<br><em>Systems.</em></h2>
-      <p class="lead">A clean map of The Omniarch's work: digital products, interactive worlds, media systems, and visual direction — each one treated as a living system.</p>
+      <div class="kicker">Environment</div>
+      <h2>The Omniarch<br><em>Environment.</em></h2>
+      <p class="lead">A separate world-exploration page for The Omniarch — built to become an Everswap-style journey through systems, builds, channels, and digital products.</p>
       <div class="pg-actions">
-        <a class="btn-seal" href="#works">View Systems ↓</a>
-        <a class="btn-line" href="/environment">Enter Environment ↗</a>
+        <a class="btn-seal" href="/environment">Enter Environment ↗</a>
+        <a class="btn-line" href="/portfolio">Open Portfolio ↗</a>
       </div>
-      <div class="pg-mini-grid" aria-label="Portfolio highlights">
-        <a href="https://thelegendsofrenzu.theomniarch.com.ng" target="_blank" rel="noopener"><span>01</span>The Legends of Ren Zu</a>
-        <a href="#digital-production"><span>02</span>Digital Production</a>
-        <a href="https://www.youtube.com/@GodofPeakFiction" target="_blank" rel="noopener"><span>03</span>GodofPeakFiction</a>
+      <div class="pg-mini-grid" aria-label="Environment paths">
+        <a href="/environment"><span>01</span>World Exploration</a>
+        <a href="/builds"><span>02</span>Builds</a>
+        <a href="/channels"><span>03</span>Channels</a>
       </div>
     </div>
   </div>
