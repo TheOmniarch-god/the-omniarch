@@ -2090,6 +2090,29 @@ body::before,body::after,.wrap::before,.section::after{ display:none !important;
 .tangle-sign:not(.play) .tangle-svg path{ stroke-dashoffset:1600; }
 .tangle-sign:not(.play) .tangle-word span{ opacity:0; transform:translateY(-180px) rotate(var(--r)); }
 
+
+
+/* ====================================================
+   OMNIARCH V45 — bottom tangle replay, every downward entry
+   ==================================================== */
+/* The reveal observer may add .in once; this override gives control to .play only. */
+.tangle-sign:not(.play) .tangle-svg path{
+  animation:none !important;
+  stroke-dashoffset:1600 !important;
+}
+.tangle-sign:not(.play) .tangle-word span{
+  animation:none !important;
+  opacity:0 !important;
+  transform:translateY(-180px) rotate(var(--r)) !important;
+}
+.tangle-sign.play .tangle-svg path{
+  animation:threadDraw 2.2s ease forwards !important;
+}
+.tangle-sign.play .tangle-word span{
+  animation:tangleDrop 1.25s cubic-bezier(.17,.88,.2,1.18) forwards, tangleSway 5.4s ease-in-out 1.3s infinite !important;
+  animation-delay:calc(var(--i)*.065s), calc(1.2s + var(--i)*.06s) !important;
+}
+
 </style>
 <script type="application/ld+json">
 {
@@ -2236,29 +2259,7 @@ body::before,body::after,.wrap::before,.section::after{ display:none !important;
 
 
 
-/* ============ V43 ROBUST TANGLED FINALE REPLAY ============ */
-(function(){
-  var sign=document.querySelector('.tangle-sign');
-  if(!sign) return;
-  var inside=false;
-  function visible(){
-    var r=sign.getBoundingClientRect();
-    return r.top < window.innerHeight*0.72 && r.bottom > window.innerHeight*0.18;
-  }
-  function replay(){
-    sign.classList.remove('play','in');
-    void sign.offsetWidth;
-    sign.classList.add('play','in');
-  }
-  function onScroll(){
-    var v=visible();
-    if(v && !inside){ inside=true; replay(); }
-    if(!v && inside){ inside=false; sign.classList.remove('play','in'); }
-  }
-  document.addEventListener('scroll', onScroll, {passive:true});
-  window.addEventListener('resize', onScroll);
-  setTimeout(onScroll, 100);
-})();
+
 
 </script>
 </head>
@@ -3059,5 +3060,58 @@ document.querySelectorAll('[data-dtab]').forEach(function(btn){
 })();
 
 </script>
+
+<script>
+/* ============ V45 BOTTOM TANGLE: REPLAY ON EVERY DOWNWARD ENTRY ============ */
+(function(){
+  function init(){
+    var sign=document.querySelector('.tangle-sign');
+    if(!sign) return;
+    var lastY=window.scrollY || window.pageYOffset || 0;
+    var armed=true;
+    var ticking=false;
+    function replay(){
+      sign.classList.remove('play','in');
+      // hard reset SVG path/letter animations
+      sign.querySelectorAll('.tangle-svg path, .tangle-word span').forEach(function(el){
+        el.style.animation='none';
+        void el.offsetWidth;
+        el.style.animation='';
+      });
+      void sign.offsetWidth;
+      sign.classList.add('play','in');
+    }
+    function check(){
+      ticking=false;
+      var y=window.scrollY || window.pageYOffset || 0;
+      var down=y>lastY;
+      lastY=y;
+      var r=sign.getBoundingClientRect();
+      var h=window.innerHeight || document.documentElement.clientHeight;
+      var entering = r.top < h*0.72 && r.bottom > h*0.08;
+      var resetZone = r.top > h*0.86 || r.bottom < h*0.05;
+      if(resetZone){
+        armed=true;
+        sign.classList.remove('play','in');
+      }
+      if(down && armed && entering){
+        armed=false;
+        replay();
+      }
+    }
+    function onScroll(){
+      if(!ticking){ ticking=true; requestAnimationFrame(check); }
+    }
+    document.addEventListener('scroll', onScroll, {passive:true});
+    window.addEventListener('resize', onScroll);
+    // Tap/click on the finale also replays without the ugly flash.
+    sign.addEventListener('pointerdown', function(){ armed=false; replay(); });
+    setTimeout(check, 150);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+
 </body>
 </html>
