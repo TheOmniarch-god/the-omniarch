@@ -2090,108 +2090,6 @@ body::before,body::after,.wrap::before,.section::after{ display:none !important;
 .tangle-sign:not(.play) .tangle-svg path{ stroke-dashoffset:1600; }
 .tangle-sign:not(.play) .tangle-word span{ opacity:0; transform:translateY(-180px) rotate(var(--r)); }
 
-
-
-/* ====================================================
-   OMNIARCH V44 — black/gold space-comb foundation
-   ==================================================== */
-:root{
-  --omni-black:#030302;
-  --omni-black-2:#0A0805;
-  --omni-gold:#D4B25A;
-  --omni-gold-deep:#9C7A1E;
-  --omni-white:#F7F3E8;
-  --omni-cream:#F3E7CB;
-}
-/* Main world becomes black/gold; content containers keep their paper identity. */
-body{
-  background:
-    radial-gradient(ellipse at 18% 6%, rgba(247,243,232,.09), transparent 26%),
-    radial-gradient(ellipse at 78% 12%, rgba(212,178,90,.18), transparent 30%),
-    radial-gradient(ellipse at 18% 86%, rgba(179,51,30,.08), transparent 32%),
-    linear-gradient(180deg,var(--omni-black) 0%, #080603 46%, var(--omni-black-2) 100%) !important;
-  color:var(--ink);
-}
-.space-comb{
-  position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.28;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='92' height='80' viewBox='0 0 92 80'%3E%3Cg fill='none' stroke='%23D4B25A' stroke-opacity='.34' stroke-width='1'%3E%3Cpath d='M23 1 46 14v26L23 53 0 40V14L23 1Z'/%3E%3Cpath d='M69 1 92 14v26L69 53 46 40V14L69 1Z'/%3E%3Cpath d='M46 40 69 53v26L46 92 23 79V53l23-13Z'/%3E%3C/g%3E%3C/svg%3E");
-  background-size:92px 80px;
-  mask-image:radial-gradient(ellipse at 50% 28%, #000 0%, rgba(0,0,0,.68) 38%, transparent 78%);
-  animation:spaceCombDrift 44s linear infinite;
-}
-.space-comb::before,.space-comb::after{
-  content:''; position:absolute; border-radius:50%; filter:blur(52px); opacity:.7; mix-blend-mode:screen;
-}
-.space-comb::before{ width:42vw; height:42vw; right:-12vw; top:8vh; background:radial-gradient(circle, rgba(212,178,90,.23), transparent 64%); }
-.space-comb::after{ width:34vw; height:34vw; left:-10vw; bottom:8vh; background:radial-gradient(circle, rgba(247,243,232,.10), transparent 65%); }
-@keyframes spaceCombDrift{ to{ background-position:184px 80px; } }
-.ink-field{ opacity:.38 !important; }
-.page-aurora{ display:none !important; }
-/* Paper containers stand out against the black/gold world. */
-.section:not(.tangle-sign), footer, .channel > .section{ position:relative; z-index:1; }
-.about-card,.wcard,.dossier-box,.ccard,.featured-build,.tiktok-card,.yt-card,.dp-card,.portfolio-gate-inner,.hero-card{
-  background-color:rgba(252,250,242,.94) !important;
-  box-shadow:0 34px 95px -66px rgba(0,0,0,.92), inset 0 1px 0 rgba(255,255,255,.5) !important;
-}
-.channel{ background:rgba(239,232,215,.88) !important; }
-.ticker-bar{ background:#050403 !important; border-color:rgba(212,178,90,.12) !important; }
-.ticker-item{ color:rgba(247,243,232,.42) !important; }
-.ticker-item.hl{ color:var(--omni-gold) !important; }
-/* Header/landing: professional minimal brand, fewer animations, stronger nebula/supernova. */
-.nav-brand{ display:none !important; }
-.nav-main{ justify-content:flex-end !important; }
-.hero{
-  background:
-    radial-gradient(circle at 70% 32%, rgba(255,248,216,.13), transparent 10%),
-    radial-gradient(ellipse at 72% 36%, rgba(212,178,90,.22), transparent 32%),
-    radial-gradient(ellipse at 16% 66%, rgba(179,51,30,.09), transparent 30%),
-    #000 !important;
-}
-.hero::before{
-  background:
-    radial-gradient(circle at 70% 31%, rgba(255,248,216,.86) 0 2px, rgba(212,178,90,.34) 3px 30px, transparent 90px),
-    radial-gradient(ellipse at 70% 35%, rgba(212,178,90,.22), transparent 48%) !important;
-  opacity:1 !important;
-  animation:heroNovaBreathe 8s ease-in-out infinite;
-}
-@keyframes heroNovaBreathe{ 0%,100%{ opacity:.72; filter:blur(0); } 50%{ opacity:1; filter:blur(.4px); } }
-.cosmic-forge .meteor,.cosmic-forge .forming-planet,.cosmic-forge .planet-shockwave,.cosmic-forge .world-seed,.cosmic-forge .nebula-cloud{ opacity:.18 !important; animation-duration:28s !important; }
-.hero-brand-title{
-  font-family:'Rosehot Omniarch', var(--display), serif;
-  color:var(--omni-gold);
-  font-size:clamp(30px,5vw,72px);
-  letter-spacing:.09em;
-  line-height:1;
-  margin:0 0 28px;
-  text-shadow:0 0 28px rgba(212,178,90,.22);
-  white-space:nowrap;
-}
-.hero-eyebrow{ color:var(--omni-gold) !important; }
-.hero-stack{ color:var(--omni-white) !important; }
-.hero-stack em{ color:var(--omni-gold) !important; }
-.hero-sub{ color:rgba(247,243,232,.68) !important; }
-.hero-cta .btn-seal{ background:var(--omni-gold) !important; color:#080603 !important; }
-.hero-cta .btn-line{ border-color:rgba(247,243,232,.22) !important; color:rgba(247,243,232,.82) !important; }
-/* Faster scroll reveal: the site should feel snappier. */
-.reveal{ transform:translateY(8px) !important; transition:opacity .38s var(--ease), transform .38s var(--ease) !important; }
-.reveal.in{ transform:none !important; }
-/* Menu button only, clean and professional. */
-.nav-menu-btn{ background:rgba(247,243,232,.06) !important; border:1px solid rgba(212,178,90,.16) !important; backdrop-filter:blur(10px); }
-.nav-menu-btn:hover{ border-color:rgba(212,178,90,.42) !important; }
-/* Light theme still works but stays in the same palette family. */
-.hero-awakened.hero{
-  background:
-    radial-gradient(ellipse at 72% 36%, rgba(212,178,90,.34), transparent 34%),
-    linear-gradient(135deg,#F8F1DF 0%,#E8D5AA 58%,#D4B25A 130%) !important;
-}
-.hero-awakened .hero-stack{ color:#080603 !important; }
-.hero-awakened .hero-sub{ color:rgba(10,8,5,.68) !important; }
-.hero-awakened .hero-brand-title{ color:#080603; text-shadow:none; }
-@media(max-width:700px){
-  .hero-brand-title{ font-size:clamp(24px,8vw,40px); margin-bottom:20px; white-space:normal; }
-  .hero-inner{ padding-top:88px !important; }
-}
-
 </style>
 <script type="application/ld+json">
 {
@@ -2367,7 +2265,6 @@ body{
 <body>
 <canvas id="cursor-canvas"></canvas>
 <div class="ink-field" aria-hidden="true"><span class="b1"></span><span class="b2"></span><span class="b3"></span></div>
-<div class="space-comb" aria-hidden="true"></div>
 <div class="page-aurora" aria-hidden="true"><span class="pa pa1"></span><span class="pa pa2"></span><span class="pa pa3"></span></div>
 <div class="majd-texture" aria-hidden="true"></div>
 
@@ -2428,7 +2325,6 @@ body{
   </div>
   <div class="hero-inner">
     <div class="hero-content">
-      <div class="hero-brand-title">THE OMNIARCH</div>
       <div class="hero-eyebrow">Architect of the Cosmos</div>
       <h1 class="hero-stack" id="heroStack">
         <span class="sw"><span>Systems</span></span>
@@ -2854,7 +2750,7 @@ document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeMe
 /* ============ REVEAL ON SCROLL ============ */
 var io = new IntersectionObserver(function(entries){
   entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
-}, { threshold:.08 });
+}, { threshold:.18 });
 document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
 
 /* ============ DOSSIER TABS ============ */
