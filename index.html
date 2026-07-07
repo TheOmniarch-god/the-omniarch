@@ -2159,6 +2159,53 @@ body::before,body::after,.wrap::before,.section::after{ display:none !important;
   .tangle-sign.play .tangle-word span{ animation-duration:1.15s, 4.4s !important; }
 }
 
+
+
+/* ====================================================
+   OMNIARCH V47 — translucent squircle background for finale
+   ==================================================== */
+.tangle-sign{
+  background:linear-gradient(180deg,#F8F1DF,#EBD8B3) !important;
+}
+.tangle-sign::before{
+  content:'';
+  position:absolute;
+  inset:clamp(14px,3vw,42px);
+  z-index:0;
+  border-radius:clamp(30px,5vw,72px);
+  background:
+    linear-gradient(180deg, rgba(3,3,2,.12), rgba(3,3,2,.52)),
+    url('/assets/tangle-halftone-bg.webp?v=47') center/cover no-repeat;
+  opacity:.52;
+  filter:saturate(1.05) contrast(1.05);
+  box-shadow:
+    0 34px 110px -68px rgba(10,8,5,.72),
+    inset 0 1px 0 rgba(255,255,255,.18),
+    inset 0 0 0 1px rgba(212,178,90,.14);
+  pointer-events:none;
+}
+.tangle-sign::after{
+  content:'';
+  position:absolute;
+  inset:clamp(14px,3vw,42px);
+  z-index:0;
+  border-radius:clamp(30px,5vw,72px);
+  background:radial-gradient(ellipse at 50% 38%, rgba(212,178,90,.18), transparent 42%);
+  pointer-events:none;
+}
+.tangle-svg{ z-index:1 !important; }
+.tangle-inner{ z-index:2 !important; }
+.tangle-svg path{ stroke:rgba(247,243,232,.38) !important; }
+.tangle-svg path:nth-child(2){ stroke:rgba(212,178,90,.34) !important; }
+.tangle-svg path:nth-child(4){ stroke:rgba(179,51,30,.28) !important; }
+.tangle-word span{
+  box-shadow:0 24px 60px -42px rgba(0,0,0,.92), inset 0 1px 0 rgba(255,255,255,.1), 0 0 0 1px rgba(212,178,90,.16) !important;
+}
+.tangle-kicker,.tangle-inner p{ text-shadow:0 1px 10px rgba(247,243,232,.35); }
+@media(max-width:640px){
+  .tangle-sign::before,.tangle-sign::after{ inset:10px; border-radius:32px; }
+}
+
 </style>
 <script type="application/ld+json">
 {
