@@ -2113,6 +2113,52 @@ body::before,body::after,.wrap::before,.section::after{ display:none !important;
   animation-delay:calc(var(--i)*.065s), calc(1.2s + var(--i)*.06s) !important;
 }
 
+
+
+/* ====================================================
+   OMNIARCH V46 — constant back-and-forth tangle motion
+   ==================================================== */
+.tangle-word span:nth-child(1){ --float-x:-7px; --float-y:3px; --sway-a:-1.8deg; --dur:4.7s; }
+.tangle-word span:nth-child(2){ --float-x:5px; --float-y:-4px; --sway-a:1.4deg; --dur:5.2s; }
+.tangle-word span:nth-child(3){ --float-x:-4px; --float-y:4px; --sway-a:-1.2deg; --dur:4.9s; }
+.tangle-word span:nth-child(5){ --float-x:8px; --float-y:-3px; --sway-a:1.7deg; --dur:5.4s; }
+.tangle-word span:nth-child(6){ --float-x:-6px; --float-y:5px; --sway-a:-1.5deg; --dur:4.8s; }
+.tangle-word span:nth-child(7){ --float-x:4px; --float-y:-5px; --sway-a:1.2deg; --dur:5.1s; }
+.tangle-word span:nth-child(8){ --float-x:-5px; --float-y:3px; --sway-a:-1.6deg; --dur:4.6s; }
+.tangle-word span:nth-child(9){ --float-x:7px; --float-y:-4px; --sway-a:1.8deg; --dur:5.3s; }
+.tangle-word span:nth-child(10){ --float-x:-7px; --float-y:4px; --sway-a:-1.3deg; --dur:5s; }
+.tangle-word span:nth-child(11){ --float-x:5px; --float-y:-3px; --sway-a:1.4deg; --dur:4.75s; }
+.tangle-word span:nth-child(12){ --float-x:-4px; --float-y:5px; --sway-a:-1.7deg; --dur:5.25s; }
+.tangle-sign.play .tangle-word span{
+  animation:
+    tangleDrop 1.25s cubic-bezier(.17,.88,.2,1.18) forwards,
+    tangleBoxDrift var(--dur,5s) ease-in-out infinite !important;
+  animation-delay:
+    calc(var(--i)*.065s),
+    calc(1.35s + var(--i)*.045s) !important;
+}
+.tangle-sign.play .tangle-svg path{
+  animation:
+    threadDraw 2.2s ease forwards,
+    threadAlive 5.5s ease-in-out infinite !important;
+  animation-delay:
+    calc(var(--d,0) * .1s),
+    calc(2.15s + var(--d,0) * .14s) !important;
+}
+@keyframes tangleBoxDrift{
+  0%,100%{ transform:translate3d(0,0,0) rotate(0deg); }
+  25%{ transform:translate3d(calc(var(--float-x,6px) * .7), calc(var(--float-y,4px) * -.55), 0) rotate(calc(var(--sway-a,1deg) * .7)); }
+  50%{ transform:translate3d(var(--float-x,6px), var(--float-y,4px), 0) rotate(var(--sway-a,1deg)); }
+  75%{ transform:translate3d(calc(var(--float-x,6px) * -.45), calc(var(--float-y,4px) * .55), 0) rotate(calc(var(--sway-a,1deg) * -.55)); }
+}
+@keyframes threadAlive{
+  0%,100%{ opacity:.72; filter:drop-shadow(0 0 3px rgba(212,178,90,.08)); }
+  50%{ opacity:1; filter:drop-shadow(0 0 9px rgba(212,178,90,.18)); }
+}
+@media (max-width:640px){
+  .tangle-sign.play .tangle-word span{ animation-duration:1.15s, 4.4s !important; }
+}
+
 </style>
 <script type="application/ld+json">
 {
