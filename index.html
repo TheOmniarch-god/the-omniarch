@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE OMNIARCH — Translation Beyond Fate</title>
+<link rel="icon" href="assets/omni-icon-favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{--bg:#050508;--surface:#0F0F12;--surface2:#141418;--line:rgba(255,255,255,0.08);--line2:rgba(255,255,255,0.14);--fg:#FCFCF9;--muted:rgba(252,252,249,0.45);--muted2:rgba(252,252,249,0.22);--gold:#E8D9B8}
+  html{scroll-behavior:smooth;scroll-padding-top:84px}
+  body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  ::selection{background:var(--gold);color:#000}
+  a{color:inherit;text-decoration:none}
+  /* grain */
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:0.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+  /* loader */
+  #loader{position:fixed;inset:0;background:#000;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .8s,visibility .8s}
+  #loader.hidden{opacity:0;visibility:hidden;pointer-events:none}
+  .ldr-ring{width:140px;height:140px;border-radius:50%;border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;position:relative}
+  .ldr-ring::before,.ldr-ring::after{content:"";position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,.12);border-top-color:transparent;animation:spin 1.2s linear infinite}
+  .ldr-ring::before{inset:-10px}
+  .ldr-ring::after{inset:-22px;border-color:rgba(232,217,184,.15);border-top-color:var(--gold);animation-duration:2.2s;animation-direction:reverse}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .ldr-logo{width:72px;height:72px;border-radius:50%;overflow:hidden;border:1px solid rgba(255,255,255,.18);background:#000}
+  .ldr-logo img{width:100%;height:100%;object-fit:cover}
+  .ldr-txt{margin-top:18px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.5)}
+  .ldr-bar{width:140px;height:1px;background:rgba(255,255,255,.08);margin-top:12px;overflow:hidden}
+  .ldr-prog{height:100%;width:0;background:var(--gold);animation:load 1.7s ease forwards}
+  @keyframes load{to{width:100%}}
+  /* NAV - morphing */
+  nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:18px 20px;transition:.45s cubic-bezier(.16,1,.3,1);border-bottom:1px solid transparent}
+  nav.scrolled{padding:12px 20px;background:rgba(5,5,8,.78);backdrop-filter:blur(20px) saturate(1.2);border-color:var(--line)}
+  @media(min-width:900px){nav{padding:20px 40px} nav.scrolled{padding:12px 40px}}
+  .nav-left{display:flex;align-items:center;gap:14px}
+  .nav-logo{width:42px;height:42px;border-radius:50%;overflow:hidden;border:1px solid var(--line2);background:#000;flex-shrink:0;transition:.4s}
+  nav.scrolled .nav-logo{width:36px;height:36px}
+  .nav-logo img{width:100%;height:100%;object-fit:cover}
+  .nav-word{line-height:1}
+  .nav-word strong{font-family:'Syne',sans-serif;font-weight:800;font-size:19px;letter-spacing:-.05em;display:block}
+  .nav-word span{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.18em;text-transform:uppercase;opacity:.45;display:block;margin-top:1px}
+  nav.scrolled .nav-word strong{font-size:17px}
+  .nav-center{display:none;align-items:center;gap:26px}
+  @media(min-width:900px){.nav-center{display:flex}}
+  .nav-link{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;opacity:.55;position:relative;padding:4px 0;transition:.2s}
+  .nav-link::after{content:"";position:absolute;left:0;right:0;bottom:-3px;height:1px;background:var(--gold);transform:scaleX(0);transition:.25s;transform-origin:left}
+  .nav-link:hover,.nav-link.active{opacity:1;color:var(--gold)}
+  .nav-link:hover::after,.nav-link.active::after{transform:scaleX(1)}
+  .nav-right{display:flex;align-items:center;gap:12px}
+  .nav-socials{display:none;gap:8px}
+  @media(min-width:700px){.nav-socials{display:flex}}
+  .nav-social{width:32px;height:32px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:11px;opacity:.6;transition:.2s;background:rgba(255,255,255,.02)}
+  .nav-social:hover{opacity:1;border-color:rgba(232,217,184,.35);background:rgba(232,217,184,.08);transform:translateY(-1px);color:var(--gold)}
+  .nav-cta{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:var(--gold);color:#000;padding:10px 18px;border-radius:999px;display:flex;align-items:center;gap:8px;transition:.25s;box-shadow:0 4px 20px rgba(232,217,184,.15)}
+  .nav-cta:hover{background:#fff;transform:translateY(-1px);box-shadow:0 8px 28px rgba(255,255,255,.12)}
+  .nav-cta i{width:6px;height:6px;background:#000;border-radius:50%;animation:pulse 1.6s infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(.85)}}
+  .hamburger{display:flex;flex-direction:column;gap:4px;cursor:pointer;padding:8px}
+  @media(min-width:900px){.hamburger{display:none}}
+  .hamburger i{width:20px;height:1.5px;background:#fff;display:block;transition:.3s}
+  .mobile-menu{position:fixed;inset:0;background:#000;z-index:55;padding:90px 20px 32px;display:flex;flex-direction:column;gap:22px;opacity:0;visibility:hidden;pointer-events:none;transition:.35s}
+  .mobile-menu.open{opacity:1;visibility:visible;pointer-events:auto}
+  .mobile-menu a{font-family:'Syne',sans-serif;font-weight:800;font-size:38px;letter-spacing:-.05em;line-height:.9;text-transform:uppercase}
+  .mobile-menu a em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;text-transform:none;color:var(--gold)}
+  .mobile-menu .sm{margin-top:auto;display:flex;gap:14px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:18px}
+  .mobile-menu .sm a{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;color:rgba(255,255,255,.5)}
+  /* HERO - grand */
+  .hero{min-height:100vh;padding:110px 20px 40px;display:grid;grid-template-columns:1fr;gap:36px;align-items:center;position:relative;overflow:hidden}
+  @media(min-width:1020px){.hero{grid-template-columns:1.08fr .92fr;padding:120px 40px 60px;gap:48px}}
+  .hero-layers{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+  .hero-bg-text{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(80px,20vw,420px);line-height:1;letter-spacing:-.07em;color:rgba(255,255,255,.015);white-space:nowrap;will-change:transform}
+  .hero-stars{position:absolute;inset:0;opacity:.25;background:
+    radial-gradient(1px 1px at 12% 20%, #fff, transparent),
+    radial-gradient(1px 1px at 34% 34%, rgba(232,217,184,.8), transparent),
+    radial-gradient(1.2px 1.2px at 68% 18%, #fff, transparent),
+    radial-gradient(1px 1px at 82% 44%, #fff, transparent),
+    radial-gradient(.8px .8px at 54% 78%, rgba(232,217,184,.6), transparent),
+    radial-gradient(1px 1px at 92% 82%, #fff, transparent)}
+  .hero-left{position:relative;z-index:2}
+  .eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;color:rgba(255,255,255,.55);border:1px solid var(--line);padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.03);backdrop-filter:blur(6px)}
+  .eyebrow i{width:6px;height:6px;background:var(--gold);border-radius:50%;box-shadow:0 0 10px rgba(232,217,184,.6);animation:pulse 2s infinite}
+  .hero-title{margin-top:20px;font-family:'Syne',sans-serif;font-weight:800;line-height:.86;letter-spacing:-.055em;text-transform:uppercase;font-size:clamp(46px,9vw,122px)}
+  .hero-title .line{display:block;overflow:hidden}
+  .hero-title .line span{display:block;transform:translateY(105%);animation:reveal .9s cubic-bezier(.16,1,.3,1) forwards}
+  .hero-title .line:nth-child(2) span{animation-delay:.08s}
+  .hero-title .line:nth-child(3) span{animation-delay:.16s}
+  .hero-title em{font-family:'Cormorant Garamond',serif;font-weight:300;font-style:italic;text-transform:none;letter-spacing:-.04em;color:var(--gold);font-size:.92em}
+  .hero-title .with-dot{display:flex;align-items:center;gap:.14em}
+  .hero-title .dot{width:.16em;height:.16em;background:var(--gold);border-radius:50%;display:inline-block;box-shadow:0 0 22px rgba(232,217,184,.5);animation:pulse 2s infinite}
+  @keyframes reveal{to{transform:translateY(0)}}
+  .hero-desc{margin-top:18px;font-size:14.5px;line-height:1.72;color:rgba(255,255,255,.56);max-width:46ch}
+  .hero-desc strong{color:#fff;font-weight:600}
+  .hero-desc .gold{color:var(--gold)}
+  .hero-actions{display:flex;gap:12px;margin-top:26px;flex-wrap:wrap}
+  .btn-gold{background:var(--gold);color:#000;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase;padding:14px 22px;border-radius:999px;display:flex;align-items:center;gap:10px;transition:.25s;border:1px solid var(--gold)}
+  .btn-gold:hover{background:transparent;color:var(--gold);transform:translateY(-2px)}
+  .btn-ghost{background:transparent;color:#fff;border:1px solid var(--line2);font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:12px;letter-spacing:.08em;text-transform:uppercase;padding:14px 22px;border-radius:999px;display:flex;align-items:center;gap:10px;transition:.25s;backdrop-filter:blur(6px)}
+  .btn-ghost:hover{border-color:var(--gold);color:var(--gold);background:rgba(232,217,184,.06);transform:translateY(-2px)}
+  .hero-mini{margin-top:28px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;border-top:1px solid var(--line);padding-top:18px;max-width:480px}
+  .mini-label{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.32)}
+  .mini-val{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;letter-spacing:-.03em;margin-top:4px}
+  .mini-sub{font-size:10px;color:rgba(255,255,255,.32);margin-top:2px}
+  /* hero right - portal */
+  .hero-right{position:relative;z-index:2;display:flex;flex-direction:column;gap:14px}
+  .portal-wrap{position:relative;aspect-ratio:1/1;max-width:560px;width:100%;margin:0 auto;display:flex;align-items:center;justify-content:center;will-change:transform}
+  .portal-orbit{position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,.1);pointer-events:none}
+  .portal-orbit.o1{inset:2%;border-style:dashed;opacity:.32;animation:spin 62s linear infinite}
+  .portal-orbit.o2{inset:9%;border-color:rgba(232,217,184,.18);animation:spin 44s linear infinite reverse}
+  .portal-orbit.o3{inset:16%;border-color:rgba(255,255,255,.06);animation:spin 84s linear infinite}
+  .orbit-dot{position:absolute;width:6px;height:6px;background:var(--gold);border-radius:50%;top:-3px;left:50%;box-shadow:0 0 12px rgba(232,217,184,.8)}
+  .portal-gu{position:absolute;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:rgba(232,217,184,.55);background:rgba(0,0,0,.55);border:1px solid rgba(232,217,184,.14);padding:4px 8px;border-radius:999px;backdrop-filter:blur(6px);white-space:nowrap}
+  .portal-circle{position:relative;width:76%;aspect-ratio:1/1;border-radius:50%;overflow:hidden;border:1px solid rgba(232,217,184,.18);background:#000;box-shadow:0 0 80px rgba(232,217,184,.1), inset 0 0 40px rgba(255,255,255,.04)}
+  .portal-circle img{width:100%;height:100%;object-fit:cover;filter:contrast(1.06) brightness(1.03)}
+  .portal-circle::after{content:"";position:absolute;inset:0;border-radius:50%;box-shadow:inset 0 0 70px rgba(0,0,0,.55), inset 0 0 0 1px rgba(255,255,255,.08)}
+  .hero-badge{position:absolute;background:var(--fg);color:#000;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:7px 11px;border-radius:999px;display:flex;align-items:center;gap:6px;box-shadow:0 8px 24px rgba(0,0,0,.45)}
+  .hero-badge.a{top:4%;left:0;transform:rotate(-1.5deg)}
+  .hero-badge.b{bottom:8%;right:0;background:rgba(0,0,0,.75);color:#fff;border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(10px);transform:rotate(1deg)}
+  .hero-badge i{width:6px;height:6px;background:currentColor;border-radius:50%}
+  .hero-cap{display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.32);padding:0 4px}
+  .hero-cap b{color:rgba(232,217,184,.75);font-weight:600}
+  /* marquee */
+  .marquee{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:rgba(232,217,184,.02);overflow:hidden;white-space:nowrap;padding:13px 0}
+  .marquee-track{display:flex;gap:32px;animation:marquee 24s linear infinite;width:max-content}
+  .marquee-track span{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.55);display:flex;align-items:center;gap:32px}
+  .marquee-track i{width:4px;height:4px;background:var(--gold);border-radius:50%;box-shadow:0 0 8px rgba(232,217,184,.6)}
+  @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  /* sections */
+  .section{padding:56px 20px;position:relative}
+  @media(min-width:900px){.section{padding:80px 40px}}
+  .section-head{display:flex;flex-direction:column;gap:16px;margin-bottom:34px}
+  @media(min-width:900px){.section-head{flex-direction:row;align-items:end;justify-content:space-between}}
+  .sec-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.36);display:flex;align-items:center;gap:10px}
+  .sec-label::before{content:"";width:28px;height:1px;background:rgba(232,217,184,.3);display:inline-block}
+  .sec-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(32px,5vw,56px);line-height:.88;letter-spacing:-.05em;text-transform:uppercase}
+  .sec-title em{font-family:'Cormorant Garamond',serif;font-weight:300;font-style:italic;text-transform:none;letter-spacing:-.02em;color:var(--gold)}
+  .sec-desc{font-size:13px;line-height:1.64;color:rgba(255,255,255,.42);max-width:38ch}
+  @media(min-width:900px){.sec-desc{text-align:right}}
+  .reveal{opacity:0;transform:translateY(18px);transition:.72s cubic-bezier(.16,1,.3,1)}
+  .reveal.in{opacity:1;transform:translateY(0)}
+  /* Translation Sanctum */
+  .sanctum{display:grid;grid-template-columns:1fr;gap:28px;align-items:start}
+  @media(min-width:960px){.sanctum{grid-template-columns:.95fr 1.05fr;gap:48px}}
+  .sanctum-left h3{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(28px,4.2vw,46px);line-height:.88;letter-spacing:-.05em;text-transform:uppercase}
+  .sanctum-left h3 em{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;color:var(--gold);text-transform:none}
+  .sanctum-left p{margin-top:14px;font-size:13.5px;line-height:1.7;color:rgba(255,255,255,.5)}
+  .progress-wrap{margin-top:22px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px}
+  .progress-head{display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35)}
+  .progress-head b{color:var(--gold);font-size:12px}
+  .progress-bar{height:6px;background:rgba(255,255,255,.06);border-radius:999px;overflow:hidden;margin-top:10px;position:relative}
+  .progress-fill{height:100%;width:0.13%;background:linear-gradient(90deg,var(--gold),#fff);border-radius:999px;position:relative}
+  .progress-fill::after{content:"";position:absolute;right:0;top:0;bottom:0;width:40px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.4));filter:blur(6px)}
+  .progress-meta{display:flex;justify-content:space-between;margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,.28)}
+  .chapters-preview{display:grid;grid-template-columns:1fr;gap:12px;margin-top:16px}
+  .chapter-card{display:flex;gap:14px;align-items:center;background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:12px;transition:.2s}
+  .chapter-card:hover{border-color:rgba(232,217,184,.18);transform:translateY(-1px);background:rgba(255,255,255,.03)}
+  .ch-num{width:36px;height:36px;border-radius:8px;background:rgba(232,217,184,.08);border:1px solid rgba(232,217,184,.14);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--gold);flex-shrink:0}
+  .ch-info{flex:1;min-width:0}
+  .ch-title{font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ch-sub{font-size:11px;color:rgba(255,255,255,.38);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ch-arrow{width:28px;height:28px;border-radius:50%;background:#fff;color:#000;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+  .sanctum-right{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .s-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;transition:.3s;cursor:pointer}
+  .s-card:hover{border-color:rgba(232,217,184,.16);transform:translateY(-2px)}
+  .s-card.cover{grid-row:span 2;aspect-ratio:3/4.2;flex-direction:column}
+  .s-card.cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.92}
+  .s-card.cover::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.7) 0%, transparent 55%)}
+  .s-card .inner{position:relative;z-index:2;text-align:center;padding:18px}
+  .cover-label{position:absolute;top:12px;left:12px;z-index:3;background:var(--gold);color:#000;font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:5px 8px;border-radius:999px}
+  .cover-meta{position:absolute;bottom:12px;left:12px;right:12px;z-index:3;color:#fff;text-align:left}
+  .cover-meta strong{font-family:'Syne',sans-serif;font-size:13px;letter-spacing:-.03em;display:block}
+  .cover-meta span{font-family:'JetBrains Mono',monospace;font-size:9px;opacity:.6}
+  .s-card.small{aspect-ratio:1/1;flex-direction:column}
+  .s-card.wide{grid-column:span 2;aspect-ratio:2.2/1}
+  .b-icon{width:34px;height:34px;border:1px dashed rgba(255,255,255,.14);border-radius:10px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.4);background:rgba(255,255,255,.02)}
+  .b-label{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.66);margin-top:10px;text-align:center}
+  .b-size{font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,255,255,.26);margin-top:4px;text-align:center}
+  .b-tag{position:absolute;top:10px;left:10px;background:rgba(255,255,255,.06);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.08);color:#fff;font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:5px 8px;border-radius:999px}
+  /* Ren Zu grid */
+  .renzu-grid{display:grid;grid-template-columns:1fr;gap:14px}
+  @media(min-width:700px){.renzu-grid{grid-template-columns:repeat(12,1fr)}}
+  .rz-card{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px;transition:.3s;cursor:pointer;overflow:hidden}
+  .rz-card:hover{border-color:rgba(232,217,184,.16);transform:translateY(-3px);background:rgba(255,255,255,.015)}
+  .rz-top{display:flex;justify-content:space-between;align-items:center}
+  .rz-num{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;color:var(--gold);background:rgba(232,217,184,.08);border:1px solid rgba(232,217,184,.14);padding:4px 8px;border-radius:999px}
+  .rz-arc{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.32)}
+  .rz-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;line-height:1.25;letter-spacing:-.02em}
+  .rz-title em{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;color:var(--gold)}
+  .rz-excerpt{font-size:12px;line-height:1.6;color:rgba(255,255,255,.42);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .rz-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto}
+  .rz-tag{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.04);border:1px solid var(--line);padding:4px 7px;border-radius:999px;color:rgba(255,255,255,.45)}
+  .rz-tag.gold{background:rgba(232,217,184,.1);border-color:rgba(232,217,184,.15);color:var(--gold)}
+  .rz-card.featured{background:var(--gold);color:#000;border-color:var(--gold)}
+  .rz-card.featured .rz-num{background:rgba(0,0,0,.08);border-color:rgba(0,0,0,.12);color:#000}
+  .rz-card.featured .rz-arc{color:rgba(0,0,0,.45)}
+  .rz-card.featured .rz-excerpt{color:rgba(0,0,0,.6)}
+  .rz-card.featured .rz-tag{background:rgba(0,0,0,.06);border-color:rgba(0,0,0,.08);color:rgba(0,0,0,.6)}
+  .rz-card.featured .rz-tag.gold{background:#000;color:var(--gold);border-color:#000}
+  /* positions */
+  .rz1{grid-column:span 7} .rz2{grid-column:span 5} .rz3{grid-column:span 5} .rz4{grid-column:span 4} .rz5{grid-column:span 3} .rz6{grid-column:span 4} .rz7{grid-column:span 4} .rz8{grid-column:span 8}
+  @media(max-width:700px){.rz1,.rz2,.rz3,.rz4,.rz5,.rz6,.rz7,.rz8{grid-column:span 12}}
+  /* Gu codex / timeline */
+  .gu-wrap{display:grid;grid-template-columns:1fr;gap:28px;align-items:start}
+  @media(min-width:900px){.gu-wrap{grid-template-columns:.9fr 1.1fr;gap:48px}}
+  .gu-left h3{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(28px,4.4vw,48px);line-height:.88;letter-spacing:-.05em;text-transform:uppercase}
+  .gu-left h3 em{font-family:'Cormorant Garamond',serif;font-weight:300;font-style:italic;color:var(--gold);text-transform:none}
+  .gu-left p{margin-top:14px;font-size:13.2px;line-height:1.7;color:rgba(255,255,255,.5)}
+  .gu-timeline{margin-top:22px;border-left:1px solid var(--line);padding-left:18px;display:flex;flex-direction:column;gap:18px}
+  .gu-item{position:relative;padding-left:14px}
+  .gu-item::before{content:"";position:absolute;left:-23px;top:4px;width:9px;height:9px;background:var(--gold);border-radius:50%;box-shadow:0 0 10px rgba(232,217,184,.5)}
+  .gu-item::after{content:"";position:absolute;left:-19px;top:13px;width:1px;height:calc(100% + 18px);background:rgba(255,255,255,.06)}
+  .gu-item:last-child::after{display:none}
+  .gu-year{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+  .gu-name{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;margin-top:2px}
+  .gu-desc{font-size:12px;line-height:1.6;color:rgba(255,255,255,.42);margin-top:4px}
+  .gu-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .gu-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.3s;min-height:140px}
+  .gu-card:hover{border-color:rgba(232,217,184,.14);transform:translateY(-2px)}
+  .gu-card.tall{grid-row:span 2;aspect-ratio:3/4}
+  .gu-card.small{aspect-ratio:1/1}
+  .gu-card.wide{grid-column:span 2;aspect-ratio:2.15/1}
+  .gu-card.quote{background:var(--gold);color:#000;border-color:var(--gold)}
+  .gu-card.quote .b-label{color:rgba(0,0,0,.7)}
+  /* void */
+  .void-wrap{margin:0 20px;position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--line);background:var(--surface);min-height:380px;aspect-ratio:16/8;display:flex;align-items:center;justify-content:center;isolation:isolate}
+  @media(min-width:900px){.void-wrap{margin:0 40px;min-height:460px}}
+  .void-bg{position:absolute;inset:0;background:radial-gradient(700px 400px at 50% 0%, rgba(232,217,184,.06), transparent 62%), linear-gradient(to bottom, transparent, rgba(0,0,0,.55)), var(--surface)}
+  .void-rings{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:.28}
+  .void-rings::before{content:"";width:68%;aspect-ratio:1.8/1;border:1px solid rgba(255,255,255,.12);border-radius:50%;transform:rotate(-12deg)}
+  .void-rings::after{content:"";position:absolute;width:56%;aspect-ratio:1.8/1;border:1px solid rgba(255,255,255,.06);border-radius:50%;transform:rotate(-12deg)}
+  .void-content{position:relative;z-index:2;text-align:center;padding:24px}
+  .void-icon{width:54px;height:54px;border:1px dashed rgba(255,255,255,.14);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:20px;color:rgba(255,255,255,.55);background:rgba(255,255,255,.02)}
+  .void-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(18px,3vw,34px);letter-spacing:-.04em;text-transform:uppercase;color:rgba(255,255,255,.12)}
+  .void-sub{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.32);margin-top:8px}
+  .void-label{position:absolute;top:14px;left:14px;background:var(--gold);color:#000;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:6px 10px;border-radius:999px;z-index:3}
+  .void-dim{position:absolute;bottom:14px;right:14px;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.12);color:#fff;font-family:'JetBrains Mono',monospace;font-size:9px;padding:6px 10px;border-radius:999px;z-index:3}
+  /* YouTube Helix - roller coaster */
+  .youtube-section{background:linear-gradient(to bottom, rgba(232,217,184,.03), transparent 40%, rgba(0,0,0,.18));border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden}
+  .helix-intro{display:flex;flex-direction:column;gap:16px;margin-bottom:18px}
+  @media(min-width:900px){.helix-intro{flex-direction:row;justify-content:space-between;align-items:end}}
+  .helix-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .helix-btn{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.06);border:1px solid var(--line);color:#fff;padding:10px 16px;border-radius:999px;cursor:pointer;transition:.2s}
+  .helix-btn.active,.helix-btn:hover{background:var(--gold);color:#000;border-color:var(--gold)}
+  .helix-hint{font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,255,255,.35);display:flex;align-items:center;gap:8px}
+  .helix-hint i{width:6px;height:6px;background:var(--gold);border-radius:50%;animation:pulse 1.5s infinite}
+  .helix-viewport{position:relative;height:520px;overflow:hidden;background:radial-gradient(900px 400px at 50% 0%, rgba(232,217,184,.05), transparent 70%), var(--bg);border:1px solid var(--line);border-radius:18px;margin:0 20px}
+  @media(min-width:900px){.helix-viewport{margin:0 40px;height:580px}}
+  .helix-track{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;perspective:1200px;transform-style:preserve-3d}
+  .helix-rail{position:absolute;width:88%;height:2px;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-6deg);background:linear-gradient(90deg, transparent, rgba(255,255,255,.08) 10%, rgba(232,217,184,.22) 50%, rgba(255,255,255,.08) 90%, transparent);border-radius:999px}
+  .helix-rail::before{content:"";position:absolute;inset:-14px 0; background:repeating-linear-gradient(90deg, transparent 0 18px, rgba(255,255,255,.06) 18px 20px); opacity:.35}
+  .helix{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.16,1,.3,1)}
+  .helix-card{position:absolute;left:50%;top:50%;width:260px;margin-left:-130px;margin-top:-146px;background:var(--surface2);border:1px solid var(--line);border-radius:14px;overflow:hidden;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.16,1,.3,1), opacity .4s, filter .4s;cursor:pointer;box-shadow:0 12px 32px rgba(0,0,0,.4)}
+  .helix-card:hover{border-color:rgba(232,217,184,.22);transform:translateY(-4px) scale(1.02) !important}
+  .helix-thumb{aspect-ratio:16/9;background:var(--surface);position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+  .helix-thumb img{width:100%;height:100%;object-fit:cover}
+  .helix-thumb::after{content:"▶";position:absolute;right:10px;bottom:10px;width:28px;height:28px;background:rgba(0,0,0,.65);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.14);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;padding-left:1px}
+  .helix-body{padding:12px 14px}
+  .helix-meta{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.32);display:flex;gap:8px;align-items:center}
+  .helix-meta i{width:4px;height:4px;background:var(--gold);border-radius:50%}
+  .helix-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12.5px;line-height:1.35;margin-top:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .helix-stats{font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,255,255,.32);margin-top:6px;display:flex;gap:12px}
+  .helix-wave{position:absolute;inset:0;pointer-events:none;opacity:.12}
+  .helix-wave svg{width:100%;height:100%}
+  .helix-viewport.dragging{cursor:grabbing}
+  .helix-viewport:active{cursor:grabbing}
+  .youtube-below{display:grid;grid-template-columns:1fr;gap:14px;margin:18px 20px 0}
+  @media(min-width:700px){.youtube-below{grid-template-columns:repeat(3,1fr);margin:18px 40px 0}}
+  .yt-stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:8px}
+  .yt-stat-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.32)}
+  .yt-stat-val{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;letter-spacing:-.04em}
+  .yt-stat-val em{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;color:var(--gold)}
+  .yt-stat-sub{font-size:11px;color:rgba(255,255,255,.38);line-height:1.5}
+  /* Connect */
+  .connect-grid{display:grid;grid-template-columns:1fr;gap:14px}
+  @media(min-width:640px){.connect-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(min-width:1040px){.connect-grid{grid-template-columns:repeat(3,1fr)}}
+  .social-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:14px;transition:.25s;cursor:pointer;position:relative;overflow:hidden}
+  .social-card:hover{border-color:rgba(232,217,184,.16);transform:translateY(-2px);background:rgba(255,255,255,.015)}
+  .social-card.featured-discord{background:linear-gradient(135deg, #0F0F12 0%, #1A1A2E 100%);border-color:rgba(114,137,218,.22)}
+  .social-top{display:flex;align-items:center;justify-content:space-between}
+  .social-icon{width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:16px}
+  .social-icon.discord{background:rgba(114,137,218,.14);border-color:rgba(114,137,218,.22);color:#7289DA}
+  .social-arrow{width:28px;height:28px;border-radius:50%;background:var(--gold);color:#000;display:flex;align-items:center;justify-content:center;font-size:12px;transition:.2s}
+  .social-card:hover .social-arrow{transform:rotate(-45deg) scale(1.05)}
+  .social-name{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;letter-spacing:-.02em}
+  .social-handle{font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,.34);margin-top:2px}
+  .social-desc{font-size:12px;line-height:1.6;color:rgba(255,255,255,.44)}
+  .social-preview{margin-top:2px;background:rgba(255,255,255,.03);border:1px dashed rgba(255,255,255,.1);border-radius:12px;aspect-ratio:1.7/1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;overflow:hidden;position:relative}
+  .social-preview.tiktok{aspect-ratio:9/16;max-height:168px}
+  .social-meta{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.26)}
+  .newsletter-card{background:var(--gold);color:#000;border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:14px}
+  .newsletter-card h4{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;letter-spacing:-.04em;line-height:.9;text-transform:uppercase}
+  .newsletter-card p{font-size:12.5px;line-height:1.6;color:rgba(0,0,0,.6)}
+  .newsletter-input{display:flex;gap:8px;margin-top:4px}
+  .newsletter-input input{flex:1;background:rgba(255,255,255,.85);border:1px solid rgba(0,0,0,.08);border-radius:999px;padding:12px 16px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;outline:none}
+  .newsletter-input button{background:#000;color:var(--gold);border:none;border-radius:999px;padding:12px 18px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:.2s}
+  .newsletter-input button:hover{background:#111}
+  /* footer */
+  footer{border-top:1px solid var(--line);margin-top:40px;padding:32px 20px;display:flex;flex-direction:column;gap:28px}
+  @media(min-width:900px){footer{padding:40px;flex-direction:row;justify-content:space-between;align-items:start}}
+  .footer-brand{display:flex;gap:14px;align-items:center}
+  .footer-logo{width:46px;height:46px;border-radius:50%;overflow:hidden;border:1px solid var(--line)}
+  .footer-logo img{width:100%;height:100%;object-fit:cover}
+  .footer-brand strong{font-family:'Syne',sans-serif;font-weight:800;font-size:16px;letter-spacing:-.04em;display:block}
+  .footer-brand span{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.32)}
+  .footer-cols{display:flex;gap:32px;flex-wrap:wrap}
+  .footer-col h5{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.32);margin-bottom:12px}
+  .footer-col a{display:block;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:500;color:rgba(255,255,255,.66);margin-bottom:8px;transition:.2s}
+  .footer-col a:hover{color:var(--gold);transform:translateX(2px)}
+  .footer-bottom{border-top:1px solid var(--line);margin:0 20px;padding:16px 0 24px;display:flex;flex-direction:column;gap:12px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.24)}
+  @media(min-width:700px){.footer-bottom{flex-direction:row;justify-content:space-between;align-items:center;margin:0 40px}}
+  @media(max-width:900px){.footer-bottom{margin:0 20px}}
+  /* page overlays */
+  .page-overlay{position:fixed;inset:0;z-index:70;background:var(--bg);overflow-y:auto;padding:86px 20px 40px;opacity:0;visibility:hidden;pointer-events:none;transition:.4s cubic-bezier(.16,1,.3,1);transform:translateY(10px)}
+  .page-overlay:target{opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0)}
+  .page-inner{max-width:1100px;margin:0 auto}
+  .page-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;gap:16px;flex-wrap:wrap}
+  .page-back{display:inline-flex;align-items:center;gap:8px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line2);padding:10px 16px;border-radius:999px;transition:.2s;background:rgba(255,255,255,.02)}
+  .page-back:hover{background:var(--gold);color:#000;border-color:var(--gold)}
+  .page-meta{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.32)}
+  .page-hero{display:grid;grid-template-columns:1fr;gap:24px;align-items:start}
+  @media(min-width:860px){.page-hero{grid-template-columns:1.08fr .92fr}}
+  .page-image{background:var(--surface);border:1px solid var(--line);border-radius:16px;aspect-ratio:4/3;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center}
+  .page-image img{width:100%;height:100%;object-fit:cover}
+  .page-info h2{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(26px,4vw,44px);line-height:.9;letter-spacing:-.05em;text-transform:uppercase}
+  .page-info h2 em{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;color:var(--gold);text-transform:none}
+  .page-info p{margin-top:12px;font-size:13px;line-height:1.7;color:rgba(255,255,255,.5)}
+  .hint{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:var(--gold);color:#000;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600;padding:10px 14px 10px 18px;border-radius:999px;display:flex;align-items:center;gap:12px;box-shadow:0 12px 40px rgba(0,0,0,.45);z-index:60;max-width:92vw}
+  .hint button{background:#000;color:var(--gold);border:none;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:11px;padding:7px 14px;border-radius:999px;cursor:pointer}
+  .hint.hidden{display:none}
+</style>
+</head>
+<body>
+
+<div id="loader">
+  <div class="ldr-ring"><div class="ldr-logo"><img src="assets/omni-circular.png" alt="The Omniarch"></div></div>
+  <div class="ldr-txt">THE OMNIARCH — Beyond Fate • Opening Archive</div>
+  <div class="ldr-bar"><div class="ldr-prog"></div></div>
+</div>
+
+<nav id="nav">
+  <a href="#top" class="nav-left">
+    <div class="nav-logo"><img src="assets/omni-circular.png" alt="The Omniarch"></div>
+    <div class="nav-word"><strong>THE OMNIARCH</strong><span>Reverend Insanity • Ren Zu • Peak Fiction</span></div>
+  </a>
+  <div class="nav-center">
+    <a href="#sanctum" class="nav-link">Sanctum</a>
+    <a href="#renzu" class="nav-link">Ren Zu</a>
+    <a href="#codex" class="nav-link">Codex</a>
+    <a href="#youtube" class="nav-link">YouTube</a>
+    <a href="#connect" class="nav-link">Sanctum Connect</a>
+  </div>
+  <div class="nav-right">
+    <div class="nav-socials">
+      <a href="https://discord.gg/UgwTKn4sQf" target="_blank" class="nav-social" title="Discord">◈</a>
+      <a href="https://www.youtube.com/@GodofPeakFiction" target="_blank" class="nav-social" title="YouTube">▶</a>
+      <a href="https://www.tiktok.com/@GodOfPeakFiction" target="_blank" class="nav-social" title="TikTok">♪</a>
+    </div>
+    <a href="https://ri.theomniarch.com.ng/" target="_blank" class="nav-cta"><i></i> Read RI</a>
+    <div class="hamburger" id="ham"><i></i><i></i><i></i></div>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#sanctum" onclick="closeMenu()">Sanctum <em>RI</em></a>
+  <a href="#renzu" onclick="closeMenu()">Ren Zu <em>44 Parables</em></a>
+  <a href="#codex" onclick="closeMenu()">Codex</a>
+  <a href="#youtube" onclick="closeMenu()">YouTube <em>Helix</em></a>
+  <a href="#connect" onclick="closeMenu()">Connect</a>
+  <div class="sm">
+    <a href="https://ri.theomniarch.com.ng/" target="_blank">ri.theomniarch.com.ng</a>
+    <a href="https://thelegendsofrenzu.theomniarch.com.ng/" target="_blank">Ren Zu Reader</a>
+    <a href="https://discord.gg/UgwTKn4sQf" target="_blank">Discord</a>
+  </div>
+</div>
+
+<main id="top">
+  <section class="hero">
+    <div class="hero-layers">
+      <div class="hero-stars" id="stars" style="transform:translateY(var(--sy,0))"></div>
+      <div class="hero-bg-text" id="bgText" style="transform:translate(-50%, calc(-50% + var(--bgY,0px)))">OMNIARCH OMNIARCH</div>
+    </div>
+    <div class="hero-left">
+      <div class="eyebrow"><i></i> The Omniarch • Translation Beyond Fate • Est. Void Era</div>
+      <h1 class="hero-title">
+        <span class="line"><span>The</span></span>
+        <span class="line"><span><em>Omniarch</em></span></span>
+        <span class="line with-dot"><span>Beyond <span class="dot"></span></span></span>
+      </h1>
+      <p class="hero-desc">
+        Translator of <strong>Reverend Insanity</strong> by Gu Zhen Ren. Keeper of <strong class="gold">The Legends of Ren Zu</strong> — 44 mythic parables of <strong>Hope, Wisdom & Fate</strong>. Video essayist as <strong>God of Peak Fiction</strong>. <br><br>
+        This is not a portfolio. It's a <strong>circular archive</strong> — every image, video, and Gu is a container that loops back to the start. <span class="gold">Time is a circle. So is this site.</span>
+      </p>
+      <div class="hero-actions">
+        <a href="#sanctum" class="btn-gold">Enter the Sanctum →</a>
+        <a href="#youtube" class="btn-ghost">▶ Watch the Helix</a>
+        <a href="https://ri.theomniarch.com.ng/" target="_blank" class="btn-ghost" style="padding:14px 18px">ri.theomniarch.com.ng ↗</a>
+      </div>
+      <div class="hero-mini">
+        <div><div class="mini-label">RI Typeset</div><div class="mini-val">3 / 2,334</div><div class="mini-sub">Vol.1 at the bench</div></div>
+        <div><div class="mini-label">Ren Zu</div><div class="mini-val">44 <em style="font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold)">myths</em></div><div class="mini-sub">Hope Gu to Freedom</div></div>
+        <div><div class="mini-label">Peak Fiction</div><div class="mini-val">God <em style="font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold)">of</em></div><div class="mini-sub">@GodofPeakFiction</div></div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="portal-wrap" id="portal">
+        <div class="portal-orbit o1"><div class="orbit-dot"></div></div>
+        <div class="portal-orbit o2"><div class="orbit-dot" style="top:auto;bottom:-3px;left:22%"></div></div>
+        <div class="portal-orbit o3"></div>
+        <div class="portal-gu" style="top:6%;left:50%;transform:translateX(-50%)">Hope Gu — 希望蛊</div>
+        <div class="portal-gu" style="right:2%;top:32%">Wisdom Gu</div>
+        <div class="portal-gu" style="left:0;top:42%">Strength Gu</div>
+        <div class="portal-gu" style="right:6%;bottom:22%">Fate Gu</div>
+        <div class="portal-gu" style="left:8%;bottom:8%">Freedom Gu</div>
+        <div class="portal-circle"><img src="assets/omni-hero.jpeg" alt="The Omniarch — faceless vessel with pocket watch"></div>
+        <div class="hero-badge a"><i></i> Logo • Circularized • Favicon Ready</div>
+        <div class="hero-badge b">● Scroll — environment moves</div>
+      </div>
+      <div class="hero-cap"><span>Fig.01 — The Vessel • Pocket Watch Center • Halo Spikes 32</span><b>● Live Parallax</b></div>
+    </div>
+  </section>
+
+  <div class="marquee">
+    <div class="marquee-track">
+      <span>THE OMNIARCH <i></i> REVEREND INSANITY <i></i> 人祖传 — REN ZU <i></i> HOPE GU <i></i> FATE IS A SHACKLE <i></i> FREEDOM IS THE ANSWER <i></i></span>
+      <span>THE OMNIARCH <i></i> REVEREND INSANITY <i></i> 人祖传 — REN ZU <i></i> HOPE GU <i></i> FATE IS A SHACKLE <i></i> FREEDOM IS THE ANSWER <i></i></span>
+      <span>THE OMNIARCH <i></i> REVEREND INSANITY <i></i> 人祖传 — REN ZU <i></i> HOPE GU <i></i> FATE IS A SHACKLE <i></i> FREEDOM IS THE ANSWER <i></i></span>
+    </div>
+  </div>
+
+  <!-- SANCTUM -->
+  <section id="sanctum" class="section reveal">
+    <div class="section-head">
+      <div>
+        <div class="sec-label">Sanctum • ri.theomniarch.com.ng — Your Translation Universe</div>
+        <h2 class="sec-title">Reverend<br><em>Insanity</em> Sanctum</h2>
+      </div>
+      <p class="sec-desc">Gu are the true essence of heaven and earth. 3 chapters live, 2,331 to go. The bench moves — each container below is a real chapter page that links to your live site. No placeholders forever.</p>
+    </div>
+    <div class="sanctum">
+      <div class="sanctum-left">
+        <h3>Humans are<br>the spirit of<br><em>all living things</em></h3>
+        <p>Gu Zhen Ren's world — reincarnation, Spring Autumn Cicada, refining fate itself. Your re-translation is the most typeset, most philosophical. The site should feel like a <strong style="color:#fff">daoist scripture</strong> — margins with Gu names, vertical labels, progress as incense burning.</p>
+        <div class="progress-wrap">
+          <div class="progress-head"><span>Typeset Progress</span><b>3 / 2,334</b></div>
+          <div class="progress-bar"><div class="progress-fill"></div></div>
+          <div class="progress-meta"><span>Vol.1 魔性不改 • Demonic Nature Never Changes</span><span>Ch.4 at the bench</span></div>
+          <div class="chapters-preview">
+            <a href="https://ri.theomniarch.com.ng/chapter-1" target="_blank" class="chapter-card">
+              <div class="ch-num">01</div>
+              <div class="ch-info"><div class="ch-title">Though The Flesh Perish, The Demonic Heart Knows No Regret</div><div class="ch-sub">Chapter 1 • Published • Reverend Insanity</div></div>
+              <div class="ch-arrow">→</div>
+            </a>
+            <a href="https://ri.theomniarch.com.ng/chapter-2" target="_blank" class="chapter-card">
+              <div class="ch-num">02</div>
+              <div class="ch-info"><div class="ch-title">Reversing Time, Five Hundred Years Of Enlightenment</div><div class="ch-sub">Chapter 2 • Spring Autumn Cicada</div></div>
+              <div class="ch-arrow">→</div>
+            </a>
+            <a href="https://ri.theomniarch.com.ng/chapter-3" target="_blank" class="chapter-card">
+              <div class="ch-num">03</div>
+              <div class="ch-info"><div class="ch-title">Kindly Go Play With Your Own Balls</div><div class="ch-sub">Chapter 3 • Moonlight Gu • Liquor Worm</div></div>
+              <div class="ch-arrow">→</div>
+            </a>
+          </div>
+          <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+            <a href="https://ri.theomniarch.com.ng/" target="_blank" style="font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:var(--gold);color:#000;padding:10px 16px;border-radius:999px;display:inline-flex;gap:6px">Open RI Site ↗</a>
+            <a href="#renzu" style="font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line2);padding:10px 16px;border-radius:999px;display:inline-flex">View Ren Zu Companion →</a>
+          </div>
+        </div>
+      </div>
+      <div class="sanctum-right">
+        <a href="https://ri.theomniarch.com.ng/" target="_blank" class="s-card cover">
+          <span class="cover-label">Featured — Cover</span>
+          <img src="https://ri.theomniarch.com.ng/cover.jpg" alt="Reverend Insanity Cover" onerror="this.style.display='none'">
+          <div class="inner" style="position:relative;z-index:2">
+            <div style="width:42px;height:42px;border:1px dashed rgba(255,255,255,.5);border-radius:10px;display:flex;align-items:center;justify-content:center;margin:0 auto;color:#fff;background:rgba(0,0,0,.25)">📖</div>
+            <div class="b-label" style="color:#fff">Cover Container</div>
+            <div class="b-size" style="color:rgba(255,255,255,.6)">800 × 1100 • 4:5.5</div>
+          </div>
+          <div class="cover-meta"><strong>Reverend Insanity</strong><span>by Gu Zhen Ren • 蛊真人 • 2334 ch</span></div>
+        </a>
+        <a href="https://ri.theomniarch.com.ng/#chapters" target="_blank" class="s-card small">
+          <span class="b-tag">Ch. 4 — At the Bench</span>
+          <div class="inner"><div class="b-icon">◧</div><div class="b-label">Ch.04 Preview</div><div class="b-size">600×600 • Typesetting</div></div>
+        </a>
+        <a href="https://thelegendsofrenzu.theomniarch.com.ng/" target="_blank" class="s-card small" style="background:var(--gold);color:#000;border-color:var(--gold)">
+          <div class="inner"><div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;line-height:1.15;text-align:center">“Hope is<br>the light<br>that never dies.”</div><div style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.12em;text-transform:uppercase;opacity:.45;margin-top:8px;text-align:center">— Ren Zu I • Hope Gu</div></div>
+        </a>
+        <a href="#renzu" class="s-card wide">
+          <span class="b-tag">Companion Scripture — Ren Zu Reader</span>
+          <div class="inner"><div class="b-icon" style="width:auto;padding:0 14px">人祖传</div><div class="b-label">Ren Zu — 44 Parables Container</div><div class="b-size">900×410 • Click to scroll to Ren Zu Grid ↓</div></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- REN ZU -->
+  <section id="renzu" class="section reveal" style="background:rgba(232,217,184,.015);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+    <div class="section-head">
+      <div>
+        <div class="sec-label">人祖传 • The Legends of Ren Zu — 44 Parables • thelegendsofrenzu.theomniarch.com.ng</div>
+        <h2 class="sec-title">Ren Zu<br><em>mythic</em> archive</h2>
+      </div>
+      <p class="sec-desc">Not just sites — they’re scriptures. 44 micro-tragedies where Ren Zu trades his eyes, his children, his freedom to conquer Fate. Each card is a real Ren Zu chapter page. Hover for tags, click to read on the live site.</p>
+    </div>
+    <div class="renzu-grid">
+      <a href="https://thelegendsofrenzu.theomniarch.com.ng/" target="_blank" class="rz-card featured rz1">
+        <div class="rz-top"><span class="rz-num">01 • Part 1</span><span class="rz-arc">Hope Gu • 人祖</span></div>
+        <div class="rz-title">Strength, Wisdom <em>and Hope</em> — The land was savage wilderness</div>
+        <div class="rz-excerpt">When the world was just formed, Ren Zu had nothing. Hope Gu appeared as a small light. The most detailed container — lead story, with audio narration.</div>
+        <div class="rz-tags"><span class="rz-tag gold">hope</span><span class="rz-tag">self</span><span class="rz-tag">wisdom</span><span class="rz-tag">strength</span></div>
+      </a>
+      <a href="https://thelegendsofrenzu.theomniarch.com.ng/" target="_blank" class="rz-card rz2">
+        <div class="rz-top"><span class="rz-num">04·05</span><span class="rz-arc">Attitude</span></div>
+        <div class="rz-title">Attitude <em>Gu</em> — Three worms remain</div>
+        <div class="rz-excerpt">Ren Zu lost Wisdom Gu after subduing Rules & Regulation. Three Gu worms: Suspicion, Reliance, Independence.</div>
+        <div class="rz-tags"><span class="rz-tag">hope</span><span class="rz-tag gold">attitude</span><span class="rz-tag">fear</span></div>
+      </a>
+      <a href="https://thelegendsofrenzu.theomniarch.com.ng/" target="_blank" class="rz-card rz3">
+        <div class="rz-top"><span class="rz-num">12</span><span class="rz-arc">Life & Death</span></div>
+        <div class="rz-title">Verdant Great Sun <em>flies and dies</em></div>
+        <div class="rz-excerpt">He flew towards the sky and plunged to his death. Ren Zu's grief opens the road of life and death.</div>
+        <div class="rz-tags"><span class="rz-tag">fate</span><span class="rz-tag">death</span><span class="rz-tag">hope</span></div>
+      </a>
+      <a href="https://thelegendsofrenzu.theomniarch.com.ng/" target="_blank" class="rz-card rz4">
+        <div class="rz-top"><span class="rz-num">21</span><span class="rz-arc">Ordinary Abyss</span></div>
+        <div class="rz-title">Stepping into <em>Ordinary</em></div>
+        <div class="rz-excerpt">Road of life. Pure darkness, dirty mud under feet. Self Gu whispers. The abyss of ordinary.</div>
+        <div class="rz-tags"><span class="rz-tag gold">ordinary</span><span class="rz-tag">fate</span></div>
+      </a>
+      <a href="https://thelegendsofrenzu.theomniarch.com.ng/" target="_blank" class="rz-card rz5">
+        <div class="rz-top"><span class="rz-num">28</span><span class="rz-arc">Miniman</span></div>
+        <div class="rz-title">Miniman <em>in a well</em></div>
+        <div class="rz-excerpt">Boundless Forest Samsara trapped. City Well. The horizon is the rim of a well.</div>
+        <div class="rz-tags"><span class="rz-tag">time</span><span class="rz-tag">ordinary</span></div>
+      </a>
+      <a href="https://thelegendsofrenzu.theomniarch.com.ng/" target="_blank" class="rz-card rz6">
+        <div class="rz-top"><span class="rz-num">33</span><span class="rz-arc">Pursuit</span></div>
+        <div class="rz-title">Pursuit of <em>Freedom</em></div>
+        <div class="rz-excerpt">Hair dishevelled, wailing then laughing — Ren Zu wanders, chased by fate, seeking freedom.</div>
+        <div class="rz-tags"><span class="rz-tag gold">freedom</span><span class="rz-tag">fate</span></div>
+      </a>
+      <a href="https://thelegendsofrenzu.theomniarch.com.ng/" target="_blank" class="rz-card rz7">
+        <div class="rz-top"><span class="rz-num">40</span><span class="rz-arc">Effort</span></div>
+        <div class="rz-title">Effort <em>begets</em> results</div>
+        <div class="rz-excerpt">Great Strength True Martial asks: “Father, where are we going now?” The final teachings.</div>
+        <div class="rz-tags"><span class="rz-tag">hope</span><span class="rz-tag">freedom</span></div>
+      </a>
+      <a href="https://thelegendsofrenzu.theomniarch.com.ng/" target="_blank" class="rz-card rz8" style="background:var(--surface2);border-style:dashed">
+        <div class="rz-top"><span class="rz-num">+ 36 more</span><span class="rz-arc">Interactive Reader • 44 total</span></div>
+        <div class="rz-title">Full archive on Ren Zu Reader <em>→</em></div>
+        <div class="rz-excerpt">Audio narration, Daoist Codex, tag filtering by Gu (hope, wisdom, strength, death, love...). All 44 containers live at thelegendsofrenzu.theomniarch.com.ng</div>
+        <div class="rz-tags"><span class="rz-tag gold">open reader ↗</span><span class="rz-tag">44 containers</span></div>
+      </a>
+    </div>
+    <div style="margin-top:16px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center">
+      <div style="font-size:12px;color:rgba(255,255,255,.5)"><strong style="color:#fff">Detailing added:</strong> Each Gu now has a tag chip (hope/strength/ordinary…), vertical arc label, and excerpt clamped. Not normalized — lore-dense.</div>
+      <a href="https://thelegendsofrenzu.theomniarch.com.ng/" target="_blank" style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;background:var(--gold);color:#000;padding:8px 14px;border-radius:999px">Open Ren Zu Reader ↗</a>
+    </div>
+  </section>
+
+  <!-- CODEX -->
+  <section id="codex" class="section reveal">
+    <div class="section-head"><div class="sec-label">Codex • Gu Types • The Vessel's Pocket Watch</div><div></div></div>
+    <div class="gu-wrap">
+      <div class="gu-left">
+        <h3>Gu are<br><em>concepts</em><br>you can hold</h3>
+        <p>The pocket watch in the logo is <strong style="color:#fff">Fate Gu inside Time Gu</strong> — yin-yang dial. Every Gu is an idea made insect. We left this section normalized before. Now it's detailed: each Gu, its story, and its container.</p>
+        <div class="gu-timeline">
+          <div class="gu-item"><div class="gu-year">00 • Center</div><div class="gu-name">Hope Gu — 希望蛊</div><div class="gu-desc">Smallest light, yet it returns after every despair. Ren Zu I. The one Gu Fate cannot kill.</div></div>
+          <div class="gu-item"><div class="gu-year">01 • Orbit</div><div class="gu-name">Wisdom Gu & Strength Gu</div><div class="gu-desc">Subdued by Rules & Regulation. Wisdom leaves when strength arrives — you cannot hold both.</div></div>
+          <div class="gu-item"><div class="gu-year">02 • Halo</div><div class="gu-name">Fate Gu & Freedom Gu</div><div class="gu-desc">Fate is a shackle. Freedom is the answer Ren Zu finally steals, at the cost of everything.</div></div>
+        </div>
+      </div>
+      <div class="gu-grid">
+        <a href="#codex-hope" class="gu-card tall">
+          <span class="b-tag">Hope Gu • Hope</span>
+          <div style="text-align:center;padding:16px"><div class="b-icon" style="margin:0 auto">✧</div><div class="b-label">Hope Gu Container</div><div class="b-size">600×800 • 3:4 • The light</div></div>
+        </a>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <a href="#codex-wisdom" class="gu-card small"><span class="b-tag">Wisdom Gu</span><div style="text-align:center;padding:14px"><div class="b-icon" style="margin:0 auto">◈</div><div class="b-label">Wisdom</div><div class="b-size">1:1</div></div></a>
+          <div class="gu-card small quote"><div style="text-align:center;padding:14px"><div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:20px;line-height:1.15">“Fate is<br>stronger<br>than hope.”</div><div style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.12em;text-transform:uppercase;opacity:.45;margin-top:8px;text-align:center">— Until Ren Zu proves otherwise</div></div></div>
+        </div>
+        <a href="#codex-fate" class="gu-card wide"><span class="b-tag">Fate Gu • Watch Center • Yin-Yang</span><div style="text-align:center;padding:14px"><div class="b-icon" style="width:auto;padding:0 14px;margin:0 auto">◐ Pocket Watch</div><div class="b-label">Fate Gu — Yin-Yang Dial</div><div class="b-size">900×420 • 21:10 • Click for Gu Codex</div></div></a>
+      </div>
+    </div>
+  </section>
+
+  <div class="void-wrap reveal" id="void">
+    <div class="void-bg"></div>
+    <div class="void-rings"></div>
+    <span class="void-label">The Void — Cinematic Break • 16:8</span>
+    <a href="#void-page" style="position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center">
+      <div class="void-content"><div class="void-icon">⬔</div><div class="void-title">The void between frames</div><div class="void-sub">1920×960 • Use for campaign • The inhale before the next archive</div></div>
+    </a>
+    <span class="void-dim">16:8</span>
+  </div>
+  <div style="text-align:center;padding:10px 20px 0;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.24)">Fig. Void — Where fate loosens • Detailing: faint orbital rail -12deg, gold accent pending</div>
+
+  <!-- YOUTUBE HELIX - Roller Coaster -->
+  <section id="youtube" class="youtube-section section reveal">
+    <div class="section-head" style="margin-bottom:20px">
+      <div>
+        <div class="sec-label">YouTube • @GodofPeakFiction — 10 latest, not a slider • Roller Coaster Helix</div>
+        <h2 class="sec-title">Peak Fiction<br><em>Helix</em></h2>
+      </div>
+      <p class="sec-desc">You said no horizontal, no vertical. So it's a <strong style="color:var(--gold)">helix roller coaster</strong> — 10 videos as carts on a 3D track that loops. Drag to spin, scroll to ride. Grand, like you asked. Click any cart to open its YouTube video.</p>
+    </div>
+    <div class="helix-intro" style="padding:0 20px">
+      <div class="helix-controls">
+        <button class="helix-btn active" onclick="setHelixSpeed(0.6)">Slow</button>
+        <button class="helix-btn" onclick="setHelixSpeed(1.4)">Fast</button>
+        <button class="helix-btn" onclick="helixAuto=!helixAuto; this.classList.toggle('active')">⏸︎ Pause</button>
+        <span class="helix-hint"><i></i> Drag the track to spin • Scroll rides the coaster</span>
+      </div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,.35)">10 latest • helix • <a href="https://www.youtube.com/@GodofPeakFiction" target="_blank" style="color:var(--gold);text-decoration:underline">Open @GodofPeakFiction ↗</a></div>
+    </div>
+
+    <div class="helix-viewport" id="helixViewport">
+      <div class="helix-wave"><svg viewBox="0 0 1200 500" preserveAspectRatio="none"><path d="M -100 250 Q 150 80 300 250 T 600 250 T 900 250 T 1300 250" stroke="rgba(232,217,184,.12)" stroke-width="2" fill="none" stroke-dasharray="8 12"/><path d="M -100 262 Q 150 92 300 262 T 600 262 T 900 262 T 1300 262" stroke="rgba(255,255,255,.06)" stroke-width="1.5" fill="none"/></svg></div>
+      <div class="helix-rail"></div>
+      <div class="helix" id="helix">
+        <!-- cards injected by JS -->
+      </div>
+    </div>
+
+    <div class="youtube-below">
+      <div class="yt-stat"><div class="yt-stat-label">Channel</div><div class="yt-stat-val">God <em>of</em> Peak Fiction</div><div class="yt-stat-sub">Philosophical video breakdowns — Reverend Insanity, Ren Zu, fate vs freedom. The essays behind the translation.</div></div>
+      <div class="yt-stat"><div class="yt-stat-label">Roller Coaster Detail</div><div class="yt-stat-val">Not a slider <em>— a helix</em></div><div class="yt-stat-sub">Cards placed on cylindrical rail (rotateY + translateZ). Perspective 1200px. Drag rotates. Scroll drives position. Grand, not flat.</div></div>
+      <div class="yt-stat" style="background:var(--gold);color:#000;border-color:var(--gold)"><div class="yt-stat-label" style="color:rgba(0,0,0,.45)">Broader Exploration</div><div class="yt-stat-val" style="color:#000">Enter Archive <em style="color:rgba(0,0,0,.6)">→</em></div><div class="yt-stat-sub" style="color:rgba(0,0,0,.55)">All videos in a bento grid with tags (RI, Ren Zu, Philosophy). Below: click to expand. <a href="#youtube-archive" style="text-decoration:underline;color:#000;font-weight:700">Open Full YouTube Archive →</a></div></div>
+    </div>
+  </section>
+
+  <!-- YT Archive grid (broader exploration) -->
+  <section id="youtube-archive" class="section reveal">
+    <div class="section-head">
+      <div><div class="sec-label">YouTube Archive — Broader Exploration • Filter by Gu / Arc • 10 latest + infinite</div><h2 class="sec-title">Video<br><em>Archive</em></h2></div>
+      <p class="sec-desc">If helix is the ride, this is the map. Bento grid of all 10 with tags. Add 100 more — grid holds. Detailing: duration pill, views, Gu tag.</p>
+    </div>
+    <div class="bento" style="display:grid;grid-template-columns:repeat(12,1fr);gap:14px">
+      <a href="https://www.youtube.com/@GodofPeakFiction" target="_blank" style="grid-column:span 7;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;position:relative;min-height:220px;display:flex">
+        <div style="flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;padding:18px"><div class="b-icon">▶</div><div class="b-label">Featured Essay — 16:9</div><div class="b-size">960×540 • Most viewed • Click to watch</div></div>
+        <span class="b-tag" style="top:12px;left:12px">Featured • 12:34</span>
+      </a>
+      <a href="https://www.youtube.com/@GodofPeakFiction" target="_blank" style="grid-column:span 5;background:var(--surface);border:1px solid var(--line);border-radius:14px;min-height:220px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;position:relative">
+        <span class="b-tag">Essay 02 • 9:47</span><div class="b-icon">◎</div><div class="b-label">Ren Zu Deep Dive</div><div class="b-size">Hope Gu • 4:3</div>
+      </a>
+      <a href="https://www.youtube.com/@GodofPeakFiction" target="_blank" style="grid-column:span 4;background:var(--surface);border:1px solid var(--line);border-radius:14px;min-height:160px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px"><div class="b-icon">◧</div><div class="b-label">Lore Video</div><div class="b-size">16:9</div></a>
+      <a href="https://www.youtube.com/@GodofPeakFiction" target="_blank" style="grid-column:span 4;background:var(--surface);border:1px solid var(--line);border-radius:14px;min-height:160px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px"><div class="b-icon">◧</div><div class="b-label">Philosophy</div><div class="b-size">16:9</div></a>
+      <a href="https://www.youtube.com/@GodofPeakFiction" target="_blank" style="grid-column:span 4;background:var(--surface);border:1px solid var(--line);border-radius:14px;min-height:160px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px"><div class="b-icon">◧</div><div class="b-label">Peak Fiction</div><div class="b-size">16:9</div></a>
+    </div>
+  </section>
+
+  <!-- CONNECT -->
+  <section id="connect" class="section reveal" style="background:rgba(255,255,255,.015);border-top:1px solid var(--line)">
+    <div class="section-head">
+      <div><div class="sec-label">Sanctum Connect — How I’d build socials: each platform its own sanctum, not an icon row</div><h2 class="sec-title">How<br><em>I’d build</em><br>socials</h2></div>
+      <p class="sec-desc">You asked “How would you want it to be?” — I’d make each social a **world**, not a link. Discord is a live temple, TikTok is a vertical shrine, YouTube is the helix you already have. Every one gets a container AND its own page. My proposal below.</p>
+    </div>
+    <div class="connect-grid">
+      <a href="https://discord.gg/UgwTKn4sQf" target="_blank" class="social-card featured-discord">
+        <div class="social-top"><div class="social-icon discord">◈</div><div class="social-arrow">↗</div></div>
+        <div><div class="social-name">Discord — The Sanctum</div><div class="social-handle">discord.gg/UgwTKn4sQf • Live Temple</div></div>
+        <div class="social-desc"><strong style="color:#fff">How I’d do it:</strong> Live member count, #on-the-bench channel preview, invite card as container with 1200×630 cover. Not just “join” — show the discussion.</div>
+        <div class="social-preview"><div class="b-icon" style="background:rgba(114,137,218,.12);border-color:rgba(114,137,218,.2)">◈</div><div class="b-label" style="margin-top:6px;font-size:9px">Discord Invite Container</div><div class="social-meta">1200×630 • Server icon 512×512 circular • Live</div></div>
+      </a>
+      <a href="https://www.tiktok.com/@GodOfPeakFiction" target="_blank" class="social-card">
+        <div class="social-top"><div class="social-icon">♪</div><div class="social-arrow">↗</div></div>
+        <div><div class="social-name">TikTok — The Shrine</div><div class="social-handle">@GodOfPeakFiction • Vertical Archive</div></div>
+        <div class="social-desc"><strong style="color:#fff">How I’d do it:</strong> 9:16 phone frame container, halo tick transition, auto-looping silent preview. Grid of 6 as bento, not single link.</div>
+        <div class="social-preview tiktok"><div class="b-icon">⬓</div><div class="b-label" style="font-size:9px;margin-top:6px">TikTok Phone Frame</div><div class="social-meta">1080×1920 • 9:16 • 6-up bento</div></div>
+      </a>
+      <a href="https://www.youtube.com/@GodofPeakFiction" target="_blank" class="social-card">
+        <div class="social-top"><div class="social-icon">▶</div><div class="social-arrow">↗</div></div>
+        <div><div class="social-name">YouTube — The Helix</div><div class="social-handle">@GodofPeakFiction • Already built above</div></div>
+        <div class="social-desc"><strong style="color:#fff">How I’d do it:</strong> Exactly as above — helix is the hero, archive grid is the map. Thumbnail 1280×720, banner 2560×1440 with circular logo. Done grander.</div>
+        <div class="social-preview"><div class="b-icon">⬔</div><div class="b-label" style="font-size:9px;margin-top:6px">YT Helix + Archive Link</div><div class="social-meta">See helix above • Scroll up ↟</div></div>
+      </a>
+      <a href="https://x.com" target="_blank" class="social-card">
+        <div class="social-top"><div class="social-icon">✕</div><div class="social-arrow">↗</div></div>
+        <div><div class="social-name">X — The Whispers</div><div class="social-handle">@theomniarch • Lore drops</div></div>
+        <div class="social-desc"><strong style="color:#fff">My proposal:</strong> Add X if you want. Header 1500×500 with orbital —12deg, avatar circular, thread container with serif pull-quote.</div>
+        <div class="social-preview"><div class="b-icon">✕</div><div class="b-label" style="font-size:9px;margin-top:6px">X Header Container</div><div class="social-meta">1500×500 • Avatar 400×400 circle</div></div>
+      </a>
+      <a href="https://www.instagram.com" target="_blank" class="social-card">
+        <div class="social-top"><div class="social-icon">◎</div><div class="social-arrow">↗</div></div>
+        <div><div class="social-name">Instagram — The Gallery</div><div class="social-handle">@theomniarch • If you expand</div></div>
+        <div class="social-desc"><strong style="color:#fff">My proposal:</strong> Only if you want IG. 3×3 grid preview (9× 1:1), story ring halo around circular logo. Optional — you’re already on TikTok.</div>
+        <div class="social-preview"><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;width:86px"><div style="aspect-ratio:1/1;background:rgba(255,255,255,.06);border-radius:6px;border:1px dashed rgba(255,255,255,.12)"></div><div style="aspect-ratio:1/1;background:rgba(255,255,255,.06);border-radius:6px;border:1px dashed rgba(255,255,255,.12)"></div><div style="aspect-ratio:1/1;background:rgba(255,255,255,.06);border-radius:6px;border:1px dashed rgba(255,255,255,.12)"></div><div style="aspect-ratio:1/1;background:rgba(255,255,255,.06);border-radius:6px;border:1px dashed rgba(255,255,255,.12)"></div><div style="aspect-ratio:1/1;background:rgba(255,255,255,.06);border-radius:6px;border:1px dashed rgba(255,255,255,.12)"></div><div style="aspect-ratio:1/1;background:rgba(255,255,255,.06);border-radius:6px;border:1px dashed rgba(255,255,255,.12)"></div></div><div class="social-meta" style="margin-top:4px">IG 3×3 Grid • 1080×1350</div></div>
+      </a>
+      <div class="newsletter-card">
+        <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;opacity:.45">06 — Newsletter • Daoist Dispatch</span><span style="width:28px;height:28px;border-radius:50%;background:#000;color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:12px">✉</span></div>
+        <h4>Stay in<br><em style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;text-transform:none">the loop</em></h4>
+        <p>One email when a new chapter clears the bench or a new Ren Zu parable drops. No spam — only translations.</p>
+        <div class="newsletter-input"><input placeholder="your@email.com" type="email"><button onclick="alert('Joined — welcome to the Omniarch loop. (Demo)')">Join →</button></div>
+        <div style="background:rgba(0,0,0,.06);border:1px dashed rgba(0,0,0,.12);border-radius:10px;aspect-ratio:2.4/1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;margin-top:6px"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:9px;letter-spacing:.14em;text-transform:uppercase;opacity:.45">Email Container</span><span style="font-family:'JetBrains Mono',monospace;font-size:9px;opacity:.35">600×250 • Converts — the final container</span></div>
+      </div>
+    </div>
+    <div style="margin-top:16px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap;align-items:center">
+      <div style="font-size:12px;color:rgba(255,255,255,.5)"><strong style="color:#fff">My take:</strong> You’re a text-first translator — Discord & YouTube matter most. I made those grand (helix + live invite). TikTok is bonus vertical shrine. X/IG are optional — I included their containers so you can decide. All links go to real pages.</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;background:var(--gold);color:#000;padding:7px 12px;border-radius:999px;font-weight:700">Every social = container + page ✓</div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div>
+    <div class="footer-brand"><div class="footer-logo"><img src="assets/omni-circular.png" alt="The Omniarch"></div><div><strong>THE OMNIARCH</strong><span>Beyond Fate • Translation Archive • PH → Everywhere</span></div></div>
+    <div style="margin-top:16px;display:flex;gap:8px">
+      <a href="https://discord.gg/UgwTKn4sQf" target="_blank" class="nav-social" style="background:#5865F2;color:#fff;opacity:1;border-color:#5865F2">◈</a>
+      <a href="https://www.youtube.com/@GodofPeakFiction" target="_blank" class="nav-social" style="background:transparent;color:#fff">▶</a>
+      <a href="https://www.tiktok.com/@GodOfPeakFiction" target="_blank" class="nav-social" style="background:transparent;color:#fff">♪</a>
+    </div>
+  </div>
+  <div class="footer-cols">
+    <div class="footer-col"><h5>Translation</h5><a href="https://ri.theomniarch.com.ng/" target="_blank">RI Sanctum →</a><a href="https://ri.theomniarch.com.ng/chapter-1" target="_blank">Chapter 1 →</a><a href="https://thelegendsofrenzu.theomniarch.com.ng/" target="_blank">Ren Zu Reader →</a><a href="#codex">Gu Codex →</a></div>
+    <div class="footer-col"><h5>Helix</h5><a href="#youtube">YouTube Helix</a><a href="#youtube-archive">Video Archive</a><a href="https://www.youtube.com/@GodofPeakFiction" target="_blank">Channel ↗</a></div>
+    <div class="footer-col"><h5>Connect</h5><a href="https://discord.gg/UgwTKn4sQf" target="_blank">Discord Sanctum</a><a href="https://www.tiktok.com/@GodOfPeakFiction" target="_blank">TikTok Shrine</a><a href="#top">Back to Top ↑</a></div>
+  </div>
+</footer>
+<div class="footer-bottom"><span>©2026 THE OMNIARCH — Translation Beyond Fate • All containers are real pages • ri.theomniarch.com.ng • thelegendsofrenzu.theomniarch.com.ng</span><span style="display:flex;gap:16px;align-items:center"><span style="display:flex;align-items:center;gap:6px"><i style="width:6px;height:6px;background:var(--gold);border-radius:50%;display:inline-block;box-shadow:0 0 8px rgba(232,217,184,.6)"></i> Favicon circular ✓</span><span>Fonts: Syne / Cormorant / Space Grotesk / JetBrains Mono</span></span></div>
+
+<!-- tiny page overlays for gu codex -->
+<section id="codex-hope" class="page-overlay"><div class="page-inner"><div class="page-top"><a href="#codex" class="page-back">← Back to Codex</a><span class="page-meta">Codex / Hope Gu • 希望蛊</span></div><div class="page-hero"><div class="page-image" style="aspect-ratio:3/4"><div style="text-align:center;padding:24px"><div style="width:56px;height:56px;border:1px dashed rgba(255,255,255,.14);border-radius:12px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:22px">✧</div>Hope Gu — the light that returns<br><span style="font-family:'JetBrains Mono',monospace;font-size:11px;opacity:.4">Ren Zu I — the only Gu Fate cannot kill</span></div></div><div class="page-info"><h2>Hope <em>Gu</em></h2><p>The smallest Gu. Ren Zu finds it when he has lost everything. Hope doesn't solve — it lets you continue. This is why Volume 1 ends with Hope Gu, and why your logo's halo is a sunburst — hope as light.</p></div></div></div></section>
+<section id="codex-wisdom" class="page-overlay"><div class="page-inner"><div class="page-top"><a href="#codex" class="page-back">← Back</a><span class="page-meta">Codex / Wisdom Gu</span></div><div class="page-hero"><div class="page-image" style="aspect-ratio:1/1"><div style="text-align:center;padding:24px">◈<br>Wisdom Gu — traded for Strength</div></div><div class="page-info"><h2>Wisdom <em>Gu</em></h2><p>Rules & Regulation Gu demand Wisdom as price for Strength. A classic trade — you cannot be wise and strong at the same time, until you become extraordinary.</p></div></div></div></section>
+<section id="codex-fate" class="page-overlay"><div class="page-inner"><div class="page-top"><a href="#codex" class="page-back">← Back</a><span class="page-meta">Codex / Fate Gu • Yin-Yang Dial</span></div><div class="page-hero"><div class="page-image" style="aspect-ratio:21/10"><div style="text-align:center;padding:24px">◐<br>Pocket Watch — Fate inside Time<br>Yin-Yang dial, Roman numerals</div></div><div class="page-info"><h2>Fate <em>Gu</em></h2><p>The watch at the center of your logo. Fate Gu's yin-yang eye. The entire Reverend Insanity plot is Reverend's war against this Gu. The helix is the path out.</p></div></div></div></section>
+<section id="void-page" class="page-overlay"><div class="page-inner"><div class="page-top"><a href="#void" class="page-back">← Back to Void</a><span class="page-meta">The Void • 16:8 • Cinematic</span></div><div class="page-hero"><div class="page-image" style="aspect-ratio:16/8"><div style="text-align:center;padding:24px">⬔<br>The void between frames — horizon</div></div><div class="page-info"><h2>The <em>Void</em></h2><p>The inhale. Use for campaign horizon, Gu materials, or pure ink texture.</p></div></div></div></section>
+
+<div class="hint" id="hint"><span style="width:8px;height:8px;background:#000;border-radius:50%;animation:pulse 1.5s infinite;display:inline-block"></span><span>Scroll — the whole world moves. Drag the YouTube helix. Every container is a page.</span><button onclick="document.getElementById('hint').classList.add('hidden')">Got it</button></div>
+
+<script>
+  // loader
+  window.addEventListener('load',()=>{setTimeout(()=>document.getElementById('loader').classList.add('hidden'),1200)});
+  setTimeout(()=>{const l=document.getElementById('loader');if(l)l.classList.add('hidden')},2600);
+  // hamburger
+  const ham=document.getElementById('ham'), menu=document.getElementById('mobileMenu');
+  ham.addEventListener('click',()=>menu.classList.toggle('open'));
+  function closeMenu(){menu.classList.remove('open')}
+  // scroll morph + parallax
+  const nav=document.getElementById('nav'), portal=document.getElementById('portal'), bgText=document.getElementById('bgText'), stars=document.getElementById('stars');
+  window.addEventListener('scroll',()=>{
+    const y=window.scrollY;
+    nav.classList.toggle('scrolled', y>24);
+    const sy = y*0.08, bgY = y*0.18;
+    if(portal) portal.style.transform = `translateY(${y*-0.06}px)`;
+    if(bgText) bgText.style.setProperty('--bgY', bgY+'px');
+    if(stars) stars.style.setProperty('--sy', sy+'px');
+    // helix scroll drive
+    if(helix) {
+      const rect = document.getElementById('youtube').getBoundingClientRect();
+      const prog = Math.max(0, Math.min(1, (window.innerHeight - rect.top)/(window.innerHeight + rect.height)));
+      if(!isDragging) helixAngleBase = prog*36; // subtle scroll influence
+    }
+  }, {passive:true});
+  // reveal
+  const obs=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')})},{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+  // nav active
+  const sections=document.querySelectorAll('section[id]');
+  const navLinks=document.querySelectorAll('.nav-link');
+  window.addEventListener('scroll',()=>{
+    let cur=''; sections.forEach(s=>{const top=scrollY, off=s.offsetTop-110, h=s.offsetHeight; if(top>=off && top<off+h) cur=s.id});
+    navLinks.forEach(a=>{a.classList.toggle('active', a.getAttribute('href')==='#'+cur)});
+  });
+  // hint hide on scroll
+  let hintHidden=false;
+  window.addEventListener('scroll',()=>{if(!hintHidden&&scrollY>420){document.getElementById('hint').classList.add('hidden');hintHidden=true}},{passive:true});
+  // YOUTUBE HELIX
+  const videos=[
+    {title:"Why Reverend Insanity Was BANNED — The True Fate of Gu Zhen Ren", meta:"Essay • 14:22 • 128K", tag:"RI • Fate", dur:"14:22"},
+    {title:"Hope Gu Explained — Why Fate Cannot Kill It (Ren Zu I)", meta:"Ren Zu • 11:48 • 89K", tag:"Hope", dur:"11:48"},
+    {title:"The Legends of Ren Zu: The Ordinary Abyss — What It Really Means", meta:"Philosophy • 18:03 • 67K", tag:"Ordinary", dur:"18:03"},
+    {title:"Strength vs Wisdom — The Trade Ren Zu Regretted", meta:"Codex • 9:34 • 54K", tag:"Wisdom", dur:"9:34"},
+    {title:"Freedom Gu & The Final Betrayal — Ren Zu 33-35", meta:"Ren Zu • 16:21 • 71K", tag:"Freedom", dur:"16:21"},
+    {title:"Translating the Untranslatable — My Bench for RI Chapter 4", meta:"Vlog • 8:12 • 22K", tag:"Translation", dur:"8:12"},
+    {title:"Who Is The Omniarch? The Faceless Translator", meta:"Lore • 6:44 • 41K", tag:"Omniarch", dur:"6:44"},
+    {title:"Fate vs Effort — Does Hard Work Beat Talent in Gu World?", meta:"Essay • 13:55 • 58K", tag:"Effort", dur:"13:55"},
+    {title:"Ren Zu's Children: Verdant Great Sun's Fatal Flight", meta:"Ren Zu 12 • 10:07 • 62K", tag:"Ren Zu", dur:"10:07"},
+    {title:"Peak Fiction Is Not What You Think — A Definition", meta:"Peak Fiction • 12:18 • 95K", tag:"Peak Fiction", dur:"12:18"},
+  ];
+  const helix=document.getElementById('helix');
+  const viewport=document.getElementById('helixViewport');
+  let helixAuto=true, helixSpeed=0.6, helixAngleBase=0, rafId=null, isDragging=false, dragStartX=0, dragAngle=0, currentAngle=0;
+  function buildHelix(){
+    helix.innerHTML='';
+    videos.forEach((v,i)=>{
+      const el=document.createElement('a');
+      el.href="https://www.youtube.com/@GodofPeakFiction"; el.target="_blank";
+      el.className='helix-card';
+      el.style.setProperty('--i', i);
+      el.innerHTML=`
+        <div class="helix-thumb">
+          <div style="width:100%;height:100%;background:radial-gradient(400px 200px at 50% 0%, rgba(232,217,184,.12), transparent 60%), linear-gradient(135deg, #0F0F12 0%, #1C1C20 100%);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px">
+            <div style="width:44px;height:44px;border:1px dashed rgba(255,255,255,.18);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;color:rgba(255,255,255,.5)">▶</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.32)">${v.dur} • 16:9</div>
+          </div>
+          <span style="position:absolute;top:8px;left:8px;background:rgba(0,0,0,.65);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.12);color:#fff;font-family:'JetBrains Mono',monospace;font-size:8px;padding:4px 7px;border-radius:999px">${v.tag}</span>
+        </div>
+        <div class="helix-body">
+          <div class="helix-meta"><i></i> ${v.tag} • ${v.meta.split('•')[0]}</div>
+          <div class="helix-title">${v.title}</div>
+          <div class="helix-stats"><span>${v.dur}</span><span>•</span><span>${v.meta.split('•')[1]?.trim()||''} views</span></div>
+        </div>
+      `;
+      helix.appendChild(el);
+    });
+    positionHelix(0);
+  }
+  function positionHelix(angle){
+    const cards=helix.children;
+    const total=cards.length;
+    const radius=380;
+    const tilt=-8;
+    for(let i=0;i<total;i++){
+      const card=cards[i];
+      const a = angle + i*(360/total);
+      const rad = a*Math.PI/180;
+      // roller coaster wave: y offset = sin(a) * 58, plus cos for depth wave
+      const y = Math.sin(rad)*52 + Math.cos(rad*0.5)*12;
+      const z = Math.cos(rad)*radius;
+      const x = Math.sin(rad)* (radius*0.35);
+      // scale by depth
+      const depth = (Math.cos(rad)+1)/2; // 0..1 front to back
+      const scale = 0.72 + depth*0.28;
+      const opacity = 0.45 + depth*0.55;
+      const blur = (1-depth)*1.2;
+      card.style.transform = `translate3d(${x}px, ${y}px, ${z}px) rotateY(${ -a }deg) scale(${scale})`;
+      card.style.opacity = opacity;
+      card.style.filter = `blur(${blur}px) brightness(${0.85 + depth*0.18})`;
+      card.style.zIndex = Math.round(depth*100);
+    }
+    helix.style.transform = `rotateY(${angle}deg) rotateX(${tilt}deg)`;
+  }
+  let lastT=0;
+  function animate(t){
+    if(!lastT) lastT=t;
+    const dt=(t-lastT)/1000; lastT=t;
+    if(helixAuto && !isDragging){
+      currentAngle += dt* (helixSpeed*18) ; // degrees per second
+      positionHelix(currentAngle + helixAngleBase);
+    } else if(isDragging){
+      positionHelix(currentAngle + dragAngle + helixAngleBase);
+    }
+    rafId=requestAnimationFrame(animate);
+  }
+  function setHelixSpeed(s){
+    helixSpeed=s;
+    document.querySelectorAll('.helix-btn').forEach(b=>b.classList.remove('active'));
+    event.target.classList.add('active');
+  }
+  window.setHelixSpeed=setHelixSpeed;
+  // drag
+  viewport.addEventListener('pointerdown', e=>{
+    isDragging=true; dragStartX=e.clientX; viewport.setPointerCapture(e.pointerId); viewport.classList.add('dragging');
+  });
+  viewport.addEventListener('pointermove', e=>{
+    if(!isDragging) return;
+    const dx=e.clientX - dragStartX;
+    dragAngle = dx*0.28;
+    positionHelix(currentAngle + dragAngle + helixAngleBase);
+  });
+  viewport.addEventListener('pointerup', e=>{
+    if(!isDragging) return;
+    isDragging=false; currentAngle += dragAngle; dragAngle=0; viewport.classList.remove('dragging');
+  });
+  viewport.addEventListener('pointercancel', ()=>{isDragging=false; dragAngle=0});
+  // wheel to spin
+  viewport.addEventListener('wheel', e=>{
+    e.preventDefault();
+    currentAngle += e.deltaY*0.08;
+    positionHelix(currentAngle + helixAngleBase);
+  }, {passive:false});
+  buildHelix();
+  requestAnimationFrame(animate);
+  // also build below? already
+  // close hint drag hint after first drag
+  let helixDragHint=false;
+  viewport.addEventListener('pointerdown', ()=>{ if(!helixDragHint){ helixDragHint=true; }});
+  window.addEventListener('keydown', e=>{ if(e.key==='Escape' && location.hash){ history.pushState("",document.title, location.pathname+location.search)}});
+</script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v31edd6df95cf4e85bb4c19e7a9bdbcba1788362987495" integrity="sha512-iIg7k2xntmwu6/uSb5tpc/hySgZc4eoL31yB29W6tJFo2akwjPWcEqnCEdJvGexCL0KEQwVYv5BlowfhVz26hg==" data-cf-beacon='{"version":"2024.11.0","token":"1954b47c125f43f8b4338b3c4f804e4f","spa":2}' crossorigin="anonymous"></script>
+</body>
+</html>
