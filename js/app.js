@@ -31,7 +31,18 @@ const hamb=document.getElementById('hamb'), menu=document.getElementById('mobile
 if(hamb && menu){ hamb.addEventListener('click',()=>menu.classList.toggle('open')); window.closeMenu=()=>menu.classList.remove('open'); }
 
 const nav=document.getElementById('nav');
-window.addEventListener('scroll',()=>{ if(nav) nav.classList.toggle('scrolled', scrollY>22) },{passive:true});
+const navExplore=document.getElementById('navExplore');
+window.addEventListener('scroll',()=>{
+  if(nav) nav.classList.toggle('scrolled', scrollY>22);
+  // off header morph — frost becomes darker and center switches Explore ↔ Library
+  const heroEl=document.getElementById('hero');
+  const off = heroEl ? scrollY > (heroEl.offsetHeight - 90) : scrollY>500;
+  if(nav) nav.classList.toggle('off-header', off);
+  if(navExplore){
+    navExplore.textContent = off ? 'Library' : 'Explore';
+    navExplore.style.background = off ? 'rgba(255,255,255,.08)' : 'rgba(255,255,255,.10)';
+  }
+},{passive:true});
 
 const obs=new IntersectionObserver((es)=>{ es.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in') }) },{threshold:.12});
 document.querySelectorAll('.reveal, .portfolio-break').forEach(el=>obs.observe(el));
