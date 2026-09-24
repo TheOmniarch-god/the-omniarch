@@ -53,8 +53,17 @@ nav.scrolled .nav-center a{background:rgba(255,255,255,.08);border-color:rgba(25
 nav.scrolled .nav-discord{background:#FCFCF9;color:#000 !important}
 .nav-center-title{display:none}
 .hamb i{background:#fff}
-nav.scrolled .hamb i{background:#fff}
-body.hero-light nav .nav-center-title{color:#fff}
+/* gold touch — subtle, not too much */
+.book-card:hover, .ri-card:hover, .social-card:hover, .rz-card:hover, .s-card:hover{border-color:rgba(212,180,106,.16);box-shadow:0 10px 28px rgba(212,180,106,.07), 0 1px 0 rgba(212,180,106,.06) inset}
+.ri-card-badge{border-color:rgba(212,180,106,.18);background:rgba(8,8,10,.68);color:rgba(255,255,255,.86)}
+.ri-card-kicker i{background:rgba(212,180,106,.32)}
+.ri-card-nick span{background:var(--gold);box-shadow:0 0 8px rgba(212,180,106,.32)}
+.sec-label{color:rgba(212,180,106,.38)}
+.sec-label::before{background:rgba(212,180,106,.22)}
+.book-title em, .ri-card-title em, .sec-title em{color:var(--gold)}
+.nav-discord{border-color:rgba(212,180,106,.18)}
+.nav-discord:hover{background:var(--gold);color:#000 !important;border-color:var(--gold)}
+.tree-node:hover{border-color:rgba(212,180,106,.12)}
 .nav-logo{width:38px;height:38px;border-radius:50%;overflow:hidden;border:1px solid var(--line2);background:#000;flex-shrink:0;opacity:0;transform:translateY(-6px);transition:.45s cubic-bezier(.16,1,.3,1)}
 nav.scrolled .nav-logo{opacity:1;transform:translateY(0)}
 .nav-logo img{width:100%;height:100%;object-fit:cover}
