@@ -352,6 +352,10 @@ footer{border-top:1px solid var(--line);margin-top:40px;padding:32px 16px;displa
 @media(min-width:860px){.universe-header{grid-template-columns:340px 1fr;padding:22px}}
 .universe-cover{border-radius:12px;overflow:hidden;background:var(--surface2);aspect-ratio:3/4.2;position:relative;border:1px solid var(--line)}
 .universe-cover img{width:100%;height:100%;object-fit:cover}
+/* LOTM world — honour landscape 16:9, not portrait */
+#book-lotm .universe-header{grid-template-columns:1fr}
+#book-lotm .universe-cover{aspect-ratio:16/9}
+@media(min-width:860px){#book-lotm .universe-header{grid-template-columns:1fr}#book-lotm .universe-cover{aspect-ratio:16/9}}
 .universe-info h2{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(24px,3.4vw,36px);line-height:.9;letter-spacing:-.05em;text-transform:uppercase}
 .universe-info h2 em{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;text-transform:none}
 .universe-info p{margin-top:10px;font-size:13px;line-height:1.7;color:rgba(255,255,255,.5)}
