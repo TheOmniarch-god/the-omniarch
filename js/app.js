@@ -1,5 +1,14 @@
 /* THE OMNIARCH — Milk Ink + Text + Helix */
 window.addEventListener('load',()=>{
+  // Always land on hero on fresh visit — clear any lingering #ri-bear / #books hash from last click/reload
+  if(location.hash && location.hash !== '#hero'){
+    history.replaceState(null, document.title, location.pathname+location.search);
+    window.scrollTo(0,0);
+    // also clear any :target overlays that would stay open
+    requestAnimationFrame(()=> window.scrollTo(0,0));
+  } else if(!location.hash){
+    window.scrollTo(0,0);
+  }
   const loader=document.getElementById('loader');
   const progress=document.getElementById('loaderProgress');
   const percent=document.getElementById('loaderPercent');
