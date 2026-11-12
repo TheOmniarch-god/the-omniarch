@@ -1,21 +1,38 @@
 /* THE OMNIARCH — Milk Ink + Text + Helix */
-window.addEventListener('load',()=>{
-  // Always land on hero on fresh visit — clear any lingering #ri-bear / #books hash from last click/reload
-  if(location.hash && location.hash !== '#hero'){
-    history.replaceState(null, document.title, location.pathname+location.search);
-    window.scrollTo(0,0);
-    // also clear any :target overlays that would stay open
-    requestAnimationFrame(()=> window.scrollTo(0,0));
-  } else if(!location.hash){
-    window.scrollTo(0,0);
+
+// ── The site always opens on the hero ──
+// Nothing in this file scrolls the page while it loads, and the script in <head> switches the browser's
+// own scroll restoration off before the page is parsed. It is switched back on only while the page is in use:
+//  · 'manual' when the page is left → a reload, or the same address typed again, starts at the top
+//  · 'auto' once the page has loaded (one tick after 'pageshow', i.e. after the browser's own end-of-load
+//    restore attempt) → Back / Forward between #sections still return you to where you were
+const setScrollRestore = mode => { try{ history.scrollRestoration = mode }catch(e){} };
+window.addEventListener('pageshow', ()=> setTimeout(()=> setScrollRestore('auto'), 0));
+window.addEventListener('pagehide', ()=> setScrollRestore('manual'));
+
+// Lifts the loader — once. Last line of defence: if the page was moved while the loader still covered it and
+// the visitor did not do that themselves (e.g. a phone re-opening a discarded tab at its old position), put it
+// back on the hero first, unseen. Once the loader has lifted, the page is never moved for the visitor again.
+let visitorActed = false, loaderLifted = false;
+['wheel','touchstart','keydown','mousedown'].forEach(type =>
+  window.addEventListener(type, ()=>{ visitorActed = true }, {capture:true, passive:true, once:true}));
+function liftLoader(){
+  if(loaderLifted) return;
+  loaderLifted = true;
+  if(!visitorActed && window.scrollY > 0){
+    try{ window.scrollTo({top:0, left:0, behavior:'instant'}) }catch(e){ window.scrollTo(0,0) }
   }
-  const loader=document.getElementById('loader');
+  const loader = document.getElementById('loader');
+  if(loader) loader.classList.add('hidden');
+}
+
+window.addEventListener('load',()=>{
   const progress=document.getElementById('loaderProgress');
   const percent=document.getElementById('loaderPercent');
   let p=0;
   const int=setInterval(()=>{
     p+= Math.random()*18+6;
-    if(p>=100){p=100;clearInterval(int); setTimeout(()=>loader.classList.add('hidden'), 380)}
+    if(p>=100){p=100;clearInterval(int); setTimeout(liftLoader, 380)}
     if(progress) progress.style.width=p+'%';
     if(percent) percent.textContent=Math.round(p)+'%';
   },110);
@@ -29,8 +46,7 @@ window.addEventListener('load',()=>{
   }, 300);
 });
 setTimeout(()=>{
-  const l=document.getElementById('loader');
-  if(l && !l.classList.contains('hidden')) l.classList.add('hidden');
+  liftLoader();   // slow connection: don't wait for every image — show the page after 2.6 s
   document.querySelector('.hero-title')?.classList.add('ready');
   document.querySelector('.hero-sub')?.classList.add('in');
   document.querySelector('.hero-cta')?.classList.add('in');
@@ -313,8 +329,13 @@ if(helix && viewport){
     track.style.transform=`translateX(-${idx*100}%)`;
     if(dotsWrap) Array.from(dotsWrap.children).forEach((d,i)=> d.classList.toggle('active', i===idx));
     if(miniWrap) Array.from(miniWrap.children).forEach((m,i)=> m.classList.toggle('active', i===idx));
-    // scroll mini into view
-    if(miniWrap && miniWrap.children[idx]) miniWrap.children[idx].scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
+    // keep the active thumbnail centred — scroll the strip itself, never the page
+    // (scrollIntoView() also scrolls every ancestor: it used to drag the whole page down to this slider)
+    const mini=miniWrap && miniWrap.children[idx];
+    if(mini){
+      const strip=miniWrap.getBoundingClientRect(), box=mini.getBoundingClientRect();
+      miniWrap.scrollTo({left: miniWrap.scrollLeft + (box.left+box.width/2) - (strip.left+strip.width/2), behavior:'smooth'});
+    }
   }
   function startProgress(){
     if(!bar) return;

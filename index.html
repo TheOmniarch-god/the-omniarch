@@ -4,6 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>THE OMNIARCH — An Archive of Peak Fiction</title>
+<script>
+/* Always open on the hero. This runs before the page is parsed, so the browser never jumps to a
+   remembered #section or re-opens a remembered #ri-… page, and it holds off restoring the last
+   scroll position while the page loads (js/app.js hands that back once the page is showing). */
+try{
+  history.scrollRestoration='manual';
+  if(location.hash && location.hash!=='#hero') history.replaceState(null,'',location.pathname+location.search);
+}catch(e){}
+</script>
 
 <meta property="og:title" content="THE OMNIARCH — An Archive of Peak Fiction">
 <meta property="og:description" content="Reverend Insanity translation sanctum, Ren Zu, and Library of peak fiction — nine visions in 4K, centre-cropped expanded.">
